@@ -1,5 +1,5 @@
 // ── API base URL ─────────────────────────────────────────────────────────────
-const API_BASE = window.SUPRA_API_URL || 'https://supratravels-api.onrender.com';
+const API_BASE = window.SUPRA_API_URL || 'https://supratravels.onrender.com';
 
 // ── State ────────────────────────────────────────────────────────────────────
 let authToken = localStorage.getItem('supra_admin_token');
