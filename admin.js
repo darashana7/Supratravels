@@ -3,10 +3,10 @@ const API_BASE = window.SUPRA_API_URL || 'https://supratravels.onrender.com';
 
 // ── State ────────────────────────────────────────────────────────────────────
 let authToken = localStorage.getItem('supra_admin_token');
-let trips     = [];
+let trips = [];
 
 // ── DOM helpers ──────────────────────────────────────────────────────────────
-const $  = id  => document.getElementById(id);
+const $ = id => document.getElementById(id);
 const qs = sel => document.querySelector(sel);
 
 // ── Boot ─────────────────────────────────────────────────────────────────────
@@ -75,11 +75,11 @@ function showApp() {
 }
 
 function wireLogin() {
-    const form     = $('login-form');
-    const passEl   = $('login-password');
+    const form = $('login-form');
+    const passEl = $('login-password');
     const toggleEl = $('toggle-pass');
-    const errorEl  = $('login-error');
-    const btn      = $('login-btn');
+    const errorEl = $('login-error');
+    const btn = $('login-btn');
 
     toggleEl.addEventListener('click', () => {
         const isPass = passEl.type === 'password';
@@ -97,9 +97,9 @@ function wireLogin() {
 
         try {
             const res = await fetch(`${API_BASE}/api/auth/login`, {
-                method:  'POST',
+                method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body:    JSON.stringify({
+                body: JSON.stringify({
                     username: $('login-username').value.trim(),
                     password: passEl.value
                 })
@@ -135,10 +135,10 @@ function wireLogout() {
 // ── Navigation ────────────────────────────────────────────────────────────────
 const PAGE_TITLES = {
     dashboard: 'Dashboard',
-    packages:  'Manage Packages',
+    packages: 'Manage Packages',
     inquiries: 'Inquiries',
-    contact:   'Contact Details',
-    settings:  'Site Settings'
+    contact: 'Contact Details',
+    settings: 'Site Settings'
 };
 
 function switchTab(tabId) {
@@ -171,7 +171,7 @@ async function loadDashboard() {
     // API health check
     try {
         const res = await fetch(`${API_BASE}/api/health`);
-        const ok  = res.ok;
+        const ok = res.ok;
         setApiStatus(ok, ok ? 'Online' : 'Error');
     } catch {
         setApiStatus(false, 'Offline');
@@ -184,11 +184,11 @@ async function loadDashboard() {
 }
 
 function setApiStatus(online, label) {
-    const el  = $('api-status');
+    const el = $('api-status');
     const dot = el.querySelector('.status-dot');
     $('api-status-text').textContent = label;
     $('dash-api').textContent = label;
-    el.classList.toggle('online',  online);
+    el.classList.toggle('online', online);
     el.classList.toggle('offline', !online);
 }
 
@@ -241,8 +241,8 @@ function wireTripForm() {
 
     $('trip-form').addEventListener('submit', async e => {
         e.preventDefault();
-        const btn  = $('save-trip-btn');
-        const id   = $('trip-id').value;
+        const btn = $('save-trip-btn');
+        const id = $('trip-id').value;
         const file = $('trip-image').files[0];
 
         if (!id && !file) {
@@ -255,21 +255,21 @@ function wireTripForm() {
 
         try {
             const fd = new FormData();
-            fd.append('title',    $('trip-title').value.trim());
+            fd.append('title', $('trip-title').value.trim());
             fd.append('location', $('trip-location').value.trim());
-            fd.append('price',    $('trip-price').value);
+            fd.append('price', $('trip-price').value);
             fd.append('duration', $('trip-duration').value.trim());
-            fd.append('badge',    $('trip-badge').value.trim());
-            fd.append('order',    $('trip-order').value || '0');
+            fd.append('badge', $('trip-badge').value.trim());
+            fd.append('order', $('trip-order').value || '0');
             if (file) fd.append('image', file);
 
-            const url    = id ? `${API_BASE}/api/trips/${id}` : `${API_BASE}/api/trips`;
+            const url = id ? `${API_BASE}/api/trips/${id}` : `${API_BASE}/api/trips`;
             const method = id ? 'PUT' : 'POST';
 
             const res = await fetch(url, {
                 method,
                 headers: { Authorization: `Bearer ${authToken}` },
-                body:    fd
+                body: fd
             });
 
             if (res.ok) {
@@ -299,13 +299,13 @@ function openTripForm(trip = null) {
     $('trip-form-title').textContent = 'Add New Package';
 
     if (trip) {
-        $('trip-id').value      = trip._id;
-        $('trip-title').value   = trip.title;
+        $('trip-id').value = trip._id;
+        $('trip-title').value = trip.title;
         $('trip-location').value = trip.location;
-        $('trip-price').value   = trip.price;
+        $('trip-price').value = trip.price;
         $('trip-duration').value = trip.duration;
-        $('trip-badge').value   = trip.badge || '';
-        $('trip-order').value   = trip.order ?? 0;
+        $('trip-badge').value = trip.badge || '';
+        $('trip-order').value = trip.order ?? 0;
         $('trip-form-title').textContent = 'Edit Package';
 
         // Show existing image
@@ -325,12 +325,12 @@ function closeTripForm() {
     $('trip-form').reset();
 }
 
-window.editTrip = function(id) {
+window.editTrip = function (id) {
     const trip = trips.find(t => t._id === id);
     if (trip) openTripForm(trip);
 };
 
-window.confirmDelete = function(id, name) {
+window.confirmDelete = function (id, name) {
     $('confirm-text').textContent = `Delete package "${name}"? This will also remove the image from Cloudinary.`;
     $('confirm-overlay').classList.remove('hidden');
 
@@ -338,7 +338,7 @@ window.confirmDelete = function(id, name) {
         $('confirm-overlay').classList.add('hidden');
         try {
             const res = await fetch(`${API_BASE}/api/trips/${id}`, {
-                method:  'DELETE',
+                method: 'DELETE',
                 headers: { Authorization: `Bearer ${authToken}` }
             });
             if (res.ok) {
@@ -359,11 +359,11 @@ window.confirmDelete = function(id, name) {
 
 // ── Image Upload Drag & Drop ──────────────────────────────────────────────────
 function wireImageUpload() {
-    const dropArea   = $('image-drop-area');
-    const fileInput  = $('trip-image');
-    const preview    = $('image-preview');
+    const dropArea = $('image-drop-area');
+    const fileInput = $('trip-image');
+    const preview = $('image-preview');
     const previewImg = $('preview-img');
-    const removeBtn  = $('remove-img');
+    const removeBtn = $('remove-img');
 
     dropArea.addEventListener('click', e => {
         if (!e.target.closest('label')) fileInput.click();
@@ -407,12 +407,12 @@ async function wireContactForm() {
         const res = await fetch(`${API_BASE}/api/config/contact`);
         if (res.ok) {
             const c = await res.json();
-            $('contact-phone').value    = c.phone    || '';
+            $('contact-phone').value = c.phone || '';
             $('contact-whatsapp').value = c.whatsapp || '';
-            $('contact-email').value    = c.email    || '';
-            $('contact-address').value  = c.address  || '';
+            $('contact-email').value = c.email || '';
+            $('contact-address').value = c.address || '';
         }
-    } catch {}
+    } catch { }
 
     $('contact-form').addEventListener('submit', async e => {
         e.preventDefault();
@@ -422,16 +422,16 @@ async function wireContactForm() {
 
         try {
             const res = await fetch(`${API_BASE}/api/config/contact`, {
-                method:  'PUT',
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization:  `Bearer ${authToken}`
+                    Authorization: `Bearer ${authToken}`
                 },
                 body: JSON.stringify({
-                    phone:    $('contact-phone').value.trim(),
+                    phone: $('contact-phone').value.trim(),
                     whatsapp: $('contact-whatsapp').value.trim(),
-                    email:    $('contact-email').value.trim(),
-                    address:  $('contact-address').value.trim()
+                    email: $('contact-email').value.trim(),
+                    address: $('contact-address').value.trim()
                 })
             });
             if (res.ok) showToast('Contact details updated!', 'success');
@@ -451,10 +451,10 @@ async function wireSettingsForm() {
         if (res.ok) {
             const s = await res.json();
             $('setting-hero-headline').value = s.heroHeadline || '';
-            $('setting-hero-subtext').value  = s.heroSubtext  || '';
-            $('setting-about-text').value    = s.aboutText    || '';
+            $('setting-hero-subtext').value = s.heroSubtext || '';
+            $('setting-about-text').value = s.aboutText || '';
         }
-    } catch {}
+    } catch { }
 
     $('settings-form').addEventListener('submit', async e => {
         e.preventDefault();
@@ -464,15 +464,15 @@ async function wireSettingsForm() {
 
         try {
             const res = await fetch(`${API_BASE}/api/config/settings`, {
-                method:  'PUT',
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization:  `Bearer ${authToken}`
+                    Authorization: `Bearer ${authToken}`
                 },
                 body: JSON.stringify({
                     heroHeadline: $('setting-hero-headline').value.trim(),
-                    heroSubtext:  $('setting-hero-subtext').value.trim(),
-                    aboutText:    $('setting-about-text').value.trim()
+                    heroSubtext: $('setting-hero-subtext').value.trim(),
+                    aboutText: $('setting-about-text').value.trim()
                 })
             });
             if (res.ok) showToast('Settings saved and live!', 'success');
@@ -489,11 +489,11 @@ async function wireSettingsForm() {
 let toastTimer;
 function showToast(msg, type = 'success') {
     const toast = $('toast');
-    const icon  = $('toast-icon');
+    const icon = $('toast-icon');
     $('toast-message').textContent = msg;
 
     toast.className = 'toast';
-    icon.className  = type === 'error'
+    icon.className = type === 'error'
         ? 'fa-solid fa-circle-xmark'
         : type === 'info'
             ? 'fa-solid fa-circle-info'
