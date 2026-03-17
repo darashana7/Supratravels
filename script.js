@@ -1,7 +1,7 @@
 // ── API base URL ─────────────────────────────────────────────────────────────
 // In production this points to your Render backend.
 // For local dev, change to 'http://localhost:5000'
-const API_BASE = window.SUPRA_API_URL || 'https://supratravels-api.onrender.com';
+const API_BASE = window.SUPRA_API_URL || 'https://supratravels.onrender.com';
 
 // ── Static fallback data (shown if API is unavailable) ───────────────────────
 const FALLBACK_CONTACT = {
