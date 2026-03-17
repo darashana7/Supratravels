@@ -1,0 +1,16 @@
+{
+  "name": "supratravels-backend",
+  "runtime": "node",
+  "buildCommand": "npm install",
+  "startCommand": "npm start",
+  "envVars": [
+    { "key": "MONGODB_URI",              "generateValue": false },
+    { "key": "CLOUDINARY_CLOUD_NAME",    "generateValue": false },
+    { "key": "CLOUDINARY_API_KEY",       "generateValue": false },
+    { "key": "CLOUDINARY_API_SECRET",    "generateValue": false },
+    { "key": "JWT_SECRET",               "generateValue": true },
+    { "key": "ADMIN_USERNAME",           "generateValue": false },
+    { "key": "ADMIN_PASSWORD",           "generateValue": false },
+    { "key": "FRONTEND_URL",             "generateValue": false }
+  ]
+}

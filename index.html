@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supra Tours &amp; Travels | Explore The World</title>
+    <meta name="description"
+        content="Book your dream vacation with Supra Tours &amp; Travels. Discover the best tour packages, flight bookings, visa assistance, and premium travel experiences across India and worldwide.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- Floating WhatsApp Widget -->
+    <a href="#" class="whatsapp-float" target="_blank" rel="noopener noreferrer"
+       id="floating-whatsapp" aria-label="Chat on WhatsApp">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <i class="fa-solid fa-plane-departure"></i> SUPRA <span>TRAVELS</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#destinations">Packages</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#testimonials">Reviews</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <a href="#contact" class="btn btn-primary nav-btn">Book Now</a>
+            <div class="hamburger" id="hamburger">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu" id="mobile-menu">
+        <div class="close-menu" id="close-menu"><i class="fa-solid fa-xmark"></i></div>
+        <ul class="mobile-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#destinations">Packages</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#testimonials">Reviews</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#contact" class="btn btn-primary mt-4">Book Now</a></li>
+        </ul>
+    </div>
+
+    <!-- ═══ Hero Section ════════════════════════════════════════════════════ -->
+    <header class="hero" id="home">
+        <div class="hero-bg"
+            style="background-image: url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1920&q=80');">
+        </div>
+        <div class="hero-overlay"></div>
+
+        <div class="container hero-content">
+            <span class="subtitle reveal-up">
+                <i class="fa-solid fa-location-dot"></i>&nbsp; ELEVATE YOUR JOURNEY
+            </span>
+            <h1 class="reveal-up delay-1" id="hero-headline">
+                Explore The World With <br>
+                <span class="highlight">Supra Tours &amp; Travels</span>
+            </h1>
+            <p class="reveal-up delay-2" id="hero-subtext">
+                Unforgettable journeys, curated experiences, and the best prices guaranteed.
+                Your perfect vacation starts here.
+            </p>
+
+            <div class="search-box glass-panel reveal-up delay-3">
+                <form class="search-form" id="search-form">
+                    <div class="input-group">
+                        <label for="destination">
+                            <i class="fa-solid fa-location-dot"></i> Destination
+                        </label>
+                        <input type="text" id="destination" placeholder="Where to? (e.g. Kerala)">
+                    </div>
+                    <div class="divider"></div>
+                    <div class="input-group">
+                        <label for="date">
+                            <i class="fa-regular fa-calendar"></i> Travel Date
+                        </label>
+                        <input type="date" id="date">
+                    </div>
+                    <div class="divider"></div>
+                    <div class="input-group">
+                        <label for="guests">
+                            <i class="fa-solid fa-user-group"></i> Guests
+                        </label>
+                        <select id="guests">
+                            <option value="1">1 Person</option>
+                            <option value="2" selected>2 Persons</option>
+                            <option value="3">3 Persons</option>
+                            <option value="4+">4+ Persons</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-search">
+                        <i class="fa-solid fa-magnifying-glass"></i> Search
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="scroll-down">
+            <a href="#stats"><i class="fa-solid fa-chevron-down"></i></a>
+        </div>
+    </header>
+
+    <!-- ═══ Stats Section ════════════════════════════════════════════════════ -->
+    <section class="stats-section" id="stats">
+        <div class="container stats-grid">
+            <div class="stat-item reveal">
+                <i class="fa-solid fa-earth-asia stat-icon"></i>
+                <div class="stat-number" data-target="50" data-suffix="+">0+</div>
+                <div class="stat-label">Destinations</div>
+            </div>
+            <div class="stat-item reveal delay-1">
+                <i class="fa-solid fa-users stat-icon"></i>
+                <div class="stat-number" data-target="12000" data-suffix="+">0+</div>
+                <div class="stat-label">Happy Travellers</div>
+            </div>
+            <div class="stat-item reveal delay-2">
+                <i class="fa-solid fa-suitcase-rolling stat-icon"></i>
+                <div class="stat-number" data-target="800" data-suffix="+">0+</div>
+                <div class="stat-label">Tours Completed</div>
+            </div>
+            <div class="stat-item reveal delay-3">
+                <i class="fa-solid fa-award stat-icon"></i>
+                <div class="stat-number" data-target="10" data-suffix="+">0+</div>
+                <div class="stat-label">Years of Experience</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ Popular Packages Section ══════════════════════════════════════════ -->
+    <section class="section destinations" id="destinations">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-subtitle">TOP PACKAGES</span>
+                <h2>Discover Most Popular <span class="text-primary">Destinations</span></h2>
+                <p>We've curated the best travel packages just for you. Get ready for an adventure of a lifetime.</p>
+            </div>
+
+            <div class="grid cards-grid" id="packages-container">
+                <!-- Dynamically rendered by script.js -->
+            </div>
+
+            <div class="text-center mt-5 reveal">
+                <a href="#contact" class="btn btn-primary btn-lg">
+                    Enquire About More Packages <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ Why Choose Us ════════════════════════════════════════════════════ -->
+    <section class="section about-bg" id="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-content reveal">
+                    <span class="section-subtitle">WHY SUPRA TRAVELS</span>
+                    <h2>We Make Your Travel <br><span class="text-primary">More Enjoyable</span></h2>
+                    <p id="about-text">With years of experience in the travel industry, Supra Tours &amp; Travels ensures
+                        every aspect of your journey is flawlessly planned. We handle the details so you can enjoy the
+                        adventure.</p>
+
+                    <ul class="features-list">
+                        <li>
+                            <div class="icon-box"><i class="fa-solid fa-tag"></i></div>
+                            <div class="feature-text">
+                                <h4>Best Price Guarantee</h4>
+                                <p>We offer the most competitive rates in the market without compromising on luxury.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="icon-box"><i class="fa-solid fa-headset"></i></div>
+                            <div class="feature-text">
+                                <h4>24/7 Premium Support</h4>
+                                <p>Our travel experts are always available to assist you before, during, and after your trip.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="icon-box"><i class="fa-solid fa-shield-halved"></i></div>
+                            <div class="feature-text">
+                                <h4>Safe &amp; Secure Travel</h4>
+                                <p>Your safety is our priority. We partner only with verified hotels and operators.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="icon-box"><i class="fa-solid fa-handshake"></i></div>
+                            <div class="feature-text">
+                                <h4>Tailored Itineraries</h4>
+                                <p>Every trip is customised to match your preferences, budget, and travel style.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="about-image reveal delay-2">
+                    <div class="image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80"
+                            alt="Air Travel" class="main-img">
+                        <div class="experience-badge glass-panel">
+                            <h3>10+</h3>
+                            <p>Years of <br>Experience</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ Our Services ════════════════════════════════════════════════════ -->
+    <section class="section services-bg" id="services">
+        <div class="container">
+            <div class="section-header reveal text-center">
+                <span class="section-subtitle">OUR SERVICES</span>
+                <h2>What We <span class="text-primary">Offer</span></h2>
+                <p>Comprehensive travel solutions tailored to your unique needs.</p>
+            </div>
+
+            <div class="grid services-grid">
+                <div class="service-card reveal">
+                    <div class="service-icon"><i class="fa-solid fa-plane-up"></i></div>
+                    <h3>Flight Booking</h3>
+                    <p>Domestic and international flight ticketing at the best available corporate and retail prices.</p>
+                </div>
+                <div class="service-card reveal delay-1">
+                    <div class="service-icon"><i class="fa-solid fa-hotel"></i></div>
+                    <h3>Hotel Reservations</h3>
+                    <p>From budget stays to 5-star luxury resorts, we book accommodations that fit your style.</p>
+                </div>
+                <div class="service-card reveal delay-2">
+                    <div class="service-icon"><i class="fa-solid fa-passport"></i></div>
+                    <h3>Visa Assistance</h3>
+                    <p>Hassle-free visa processing with expert guidance for tourist and business visas worldwide.</p>
+                </div>
+                <div class="service-card reveal delay-3">
+                    <div class="service-icon"><i class="fa-solid fa-car-side"></i></div>
+                    <h3>Cab &amp; Transport</h3>
+                    <p>Reliable airport transfers, local sightseeing cabs, and luxury coach rentals.</p>
+                </div>
+                <div class="service-card reveal delay-1">
+                    <div class="service-icon"><i class="fa-solid fa-umbrella-beach"></i></div>
+                    <h3>Holiday Packages</h3>
+                    <p>All-inclusive curated holiday packages for families, couples, and solo adventurers.</p>
+                </div>
+                <div class="service-card reveal delay-2">
+                    <div class="service-icon"><i class="fa-solid fa-ship"></i></div>
+                    <h3>Cruise Booking</h3>
+                    <p>Luxury cruise experiences across the world's most stunning sea routes and destinations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ Testimonials ════════════════════════════════════════════════════ -->
+    <section class="section testimonials-section" id="testimonials">
+        <div class="container">
+            <div class="section-header reveal text-center">
+                <span class="section-subtitle">HAPPY TRAVELLERS</span>
+                <h2>What Our Clients <span class="text-primary">Say</span></h2>
+                <p>Real stories from real travellers who trust Supra Travels for their adventures.</p>
+            </div>
+
+            <div class="testimonial-wrapper reveal">
+                <div class="testimonial-track" id="testimonial-track">
+                    <!-- Dynamically rendered by script.js -->
+                </div>
+
+                <div class="testimonial-controls">
+                    <button class="slider-btn" id="prev-btn" aria-label="Previous testimonial">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <div class="dots-container" id="testimonial-dots"></div>
+                    <button class="slider-btn" id="next-btn" aria-label="Next testimonial">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ Call to Action / Contact ════════════════════════════════════════ -->
+    <section class="section cta-section" id="contact">
+        <div class="cta-overlay"></div>
+        <div class="container cta-container reveal">
+            <div class="cta-text">
+                <h2>Ready to plan your next trip?</h2>
+                <p>Contact our holiday experts today and get a free custom itinerary.</p>
+                <div class="cta-contact-details">
+                    <a href="tel:+919876543210" class="cta-link">
+                        <i class="fa-solid fa-phone"></i>
+                        <span id="cta-phone">+91 98765 43210</span>
+                    </a>
+                    <a href="mailto:info@supratravels.in" class="cta-link">
+                        <i class="fa-solid fa-envelope"></i>
+                        <span>info@supratravels.in</span>
+                    </a>
+                    <a href="https://wa.me/919876543210" target="_blank" class="cta-link cta-wa">
+                        <i class="fa-brands fa-whatsapp"></i>
+                        <span>Chat on WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+            <div class="cta-form glass-panel">
+                <h3>Quick Inquiry</h3>
+                <form id="inquiry-form">
+                    <div class="form-group">
+                        <input type="text" id="inq-name" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" id="inq-phone" placeholder="Phone Number" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="inq-dest" placeholder="Where do you want to go?" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="date" id="inq-date">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Send Request</button>
+                    <p class="form-note">Or call us at: <strong>+91 98765 43210</strong></p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ Footer ════════════════════════════════════════════════════════════ -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col brand-col">
+                    <a href="#" class="logo footer-logo">
+                        <i class="fa-solid fa-plane-departure"></i> SUPRA <span>TRAVELS</span>
+                    </a>
+                    <p>Your trusted travel partner for domestic and international tours, flight bookings, and
+                        unmatchable holiday experiences since 2014.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#destinations">Tour Packages</a></li>
+                        <li><a href="#services">Our Services</a></li>
+                        <li><a href="#testimonials">Reviews</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Top Destinations</h4>
+                    <ul>
+                        <li><a href="#destinations">Kerala, India</a></li>
+                        <li><a href="#destinations">Kashmir, India</a></li>
+                        <li><a href="#destinations">Goa, India</a></li>
+                        <li><a href="#destinations">Rajasthan, India</a></li>
+                        <li><a href="#destinations">Dubai, UAE</a></li>
+                        <li><a href="#destinations">Bali, Indonesia</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Contact Info</h4>
+                    <ul class="contact-info">
+                        <li>
+                            <i class="fa-solid fa-location-dot"></i>
+                            <span id="footer-address">124 Travel Avenue, Jubilee Hills, Hyderabad – 500033</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-phone"></i>
+                            <span id="footer-phone">+91 98765 43210</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-envelope"></i>
+                            <span id="footer-email">info@supratravels.in</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 Supra Tours &amp; Travels. All Rights Reserved.
+                    | <a href="#">Privacy Policy</a>
+                    | <a href="#">Terms of Service</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

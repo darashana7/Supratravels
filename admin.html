@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supra Admin — Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+    <!-- ═══ LOGIN SCREEN ════════════════════════════════════════════════════ -->
+    <div id="login-screen" class="login-screen">
+        <div class="login-card glass-panel">
+            <div class="login-logo">
+                <i class="fa-solid fa-plane-departure"></i> SUPRA <span>ADMIN</span>
+            </div>
+            <h2>Welcome back</h2>
+            <p class="login-subtitle">Sign in to manage your travel website</p>
+
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-username"><i class="fa-solid fa-user"></i> Username</label>
+                    <input type="text" id="login-username" placeholder="admin" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="login-password"><i class="fa-solid fa-lock"></i> Password</label>
+                    <div class="password-wrap">
+                        <input type="password" id="login-password" placeholder="••••••••" required autocomplete="current-password">
+                        <button type="button" class="toggle-pass" id="toggle-pass" aria-label="Toggle password">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="login-error" class="login-error hidden"></div>
+                <button type="submit" class="btn btn-primary btn-block" id="login-btn">
+                    <i class="fa-solid fa-right-to-bracket"></i> Sign In
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ═══ ADMIN DASHBOARD ══════════════════════════════════════════════════ -->
+    <div id="admin-app" class="admin-app hidden">
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="logo" target="_blank">
+                    <i class="fa-solid fa-plane-departure"></i> SUPRA <span>ADMIN</span>
+                </a>
+            </div>
+
+            <ul class="nav-links" id="sidebar-nav">
+                <li class="active" data-tab="dashboard">
+                    <i class="fa-solid fa-chart-pie"></i> Dashboard
+                </li>
+                <li data-tab="packages">
+                    <i class="fa-solid fa-suitcase-rolling"></i> Manage Packages
+                </li>
+                <li data-tab="inquiries">
+                    <i class="fa-solid fa-envelope-open-text"></i> Inquiries
+                </li>
+                <li data-tab="contact">
+                    <i class="fa-solid fa-address-book"></i> Contact Details
+                </li>
+                <li data-tab="settings">
+                    <i class="fa-solid fa-gear"></i> Site Settings
+                </li>
+                <li>
+                    <a href="index.html" target="_blank" style="color:inherit">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> View Live Site
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="admin-badge">
+                    <div class="admin-avatar"><i class="fa-solid fa-user-shield"></i></div>
+                    <div>
+                        <span class="admin-name" id="admin-name">Admin</span>
+                        <span class="admin-role">Administrator</span>
+                    </div>
+                </div>
+                <button class="btn btn-logout" id="logout-btn">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="sidebar-toggle" id="sidebar-toggle">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <h2 id="page-title">Dashboard</h2>
+                </div>
+                <div class="topbar-right">
+                    <div class="api-status" id="api-status">
+                        <span class="status-dot"></span> <span id="api-status-text">Connecting…</span>
+                    </div>
+                    <span class="topbar-time" id="topbar-time"></span>
+                </div>
+            </header>
+
+            <div class="content-area">
+
+                <!-- ── Dashboard Tab ─────────────────────────────── -->
+                <section id="dashboard" class="tab-content active">
+                    <div class="dash-stats">
+                        <div class="stat-card blue">
+                            <div class="stat-icon-wrap"><i class="fa-solid fa-suitcase-rolling"></i></div>
+                            <div class="stat-info">
+                                <p class="stat-label">Total Packages</p>
+                                <h3 class="stat-value" id="dash-trips">—</h3>
+                            </div>
+                        </div>
+                        <div class="stat-card green">
+                            <div class="stat-icon-wrap"><i class="fa-solid fa-envelope"></i></div>
+                            <div class="stat-info">
+                                <p class="stat-label">Inquiries</p>
+                                <h3 class="stat-value" id="dash-inquiries">—</h3>
+                            </div>
+                        </div>
+                        <div class="stat-card orange">
+                            <div class="stat-icon-wrap"><i class="fa-solid fa-globe"></i></div>
+                            <div class="stat-info">
+                                <p class="stat-label">API Status</p>
+                                <h3 class="stat-value" id="dash-api">—</h3>
+                            </div>
+                        </div>
+                        <div class="stat-card purple">
+                            <div class="stat-icon-wrap"><i class="fa-brands fa-cloudinary"></i></div>
+                            <div class="stat-info">
+                                <p class="stat-label">Image Storage</p>
+                                <h3 class="stat-value">Cloudinary</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dash-grid">
+                        <div class="dash-card">
+                            <h3 class="dash-card-title"><i class="fa-solid fa-list-check"></i> Quick Actions</h3>
+                            <div class="quick-actions">
+                                <button class="qa-btn" onclick="switchTab('packages')">
+                                    <i class="fa-solid fa-plus"></i> Add New Package
+                                </button>
+                                <button class="qa-btn" onclick="switchTab('contact')">
+                                    <i class="fa-solid fa-phone"></i> Update Contact
+                                </button>
+                                <button class="qa-btn" onclick="switchTab('settings')">
+                                    <i class="fa-solid fa-pen"></i> Edit Hero Text
+                                </button>
+                                <a href="index.html" target="_blank" class="qa-btn">
+                                    <i class="fa-solid fa-eye"></i> Preview Site
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="dash-card">
+                            <h3 class="dash-card-title"><i class="fa-solid fa-circle-info"></i> Deployment Info</h3>
+                            <ul class="info-list">
+                                <li><i class="fa-solid fa-triangle-exclamation" style="color:#f97316"></i> <strong>Frontend:</strong> Vercel (static)</li>
+                                <li><i class="fa-solid fa-server" style="color:#2563eb"></i> <strong>Backend API:</strong> Render (Node.js)</li>
+                                <li><i class="fa-solid fa-database" style="color:#16a34a"></i> <strong>Database:</strong> MongoDB Atlas</li>
+                                <li><i class="fa-brands fa-cloudinary" style="color:#3448c5"></i> <strong>Images:</strong> Cloudinary CDN</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ── Manage Packages Tab ────────────────────────── -->
+                <section id="packages" class="tab-content">
+                    <div class="section-header-flex">
+                        <h3>Manage Tour Packages</h3>
+                        <button class="btn btn-primary" id="add-trip-btn">
+                            <i class="fa-solid fa-plus"></i> Add Package
+                        </button>
+                    </div>
+
+                    <!-- Package Form -->
+                    <div class="form-card hidden" id="trip-form-card">
+                        <div class="form-card-header">
+                            <h4 id="trip-form-title">Add New Package</h4>
+                            <button class="icon-btn" id="close-trip-form"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <form id="trip-form" enctype="multipart/form-data">
+                            <input type="hidden" id="trip-id">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Trip Title *</label>
+                                    <input type="text" id="trip-title" placeholder="e.g. Magical Kerala Tour" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Location *</label>
+                                    <input type="text" id="trip-location" placeholder="e.g. Munnar, Alleppey" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Price (₹) *</label>
+                                    <input type="number" id="trip-price" placeholder="14999" min="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Duration *</label>
+                                    <input type="text" id="trip-duration" placeholder="e.g. 5 Days / 4 Nights" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Badge <span class="optional">(optional)</span></label>
+                                    <input type="text" id="trip-badge" placeholder="e.g. Best Seller, 20% OFF">
+                                </div>
+                                <div class="form-group">
+                                    <label>Display Order</label>
+                                    <input type="number" id="trip-order" placeholder="0" min="0">
+                                </div>
+                            </div>
+                            <div class="form-group mt-4">
+                                <label>Trip Image *</label>
+                                <div class="image-upload-area" id="image-drop-area">
+                                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                                    <p>Drag & drop or <label for="trip-image" class="upload-link">browse</label></p>
+                                    <small>JPG, PNG, WEBP up to 8MB — auto-optimised via Cloudinary</small>
+                                    <input type="file" id="trip-image" accept="image/*" class="hidden">
+                                </div>
+                                <div class="image-preview hidden" id="image-preview">
+                                    <img id="preview-img" src="" alt="Preview">
+                                    <button type="button" class="remove-img" id="remove-img">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
+                                </div>
+                                <small class="text-muted" id="existing-image-note" style="display:none">
+                                    ℹ️ No new image selected — existing image will be kept.
+                                </small>
+                            </div>
+                            <div class="form-actions mt-4">
+                                <button type="button" class="btn btn-outline" id="cancel-trip-btn">Cancel</button>
+                                <button type="submit" class="btn btn-primary" id="save-trip-btn">
+                                    <i class="fa-solid fa-floppy-disk"></i> Save Package
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Trips Table -->
+                    <div class="table-container mt-4" id="trips-table-wrap">
+                        <table class="data-table" id="trips-table">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Package</th>
+                                    <th>Location</th>
+                                    <th>Price</th>
+                                    <th>Duration</th>
+                                    <th>Order</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trips-tbody">
+                                <tr><td colspan="7" class="text-center text-muted">
+                                    <i class="fa-solid fa-spinner fa-spin"></i> Loading packages…
+                                </td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ── Inquiries Tab ──────────────────────────────── -->
+                <section id="inquiries" class="tab-content">
+                    <div class="section-header-flex">
+                        <h3>Customer Inquiries</h3>
+                        <span class="badge-count" id="inq-count">0 total</span>
+                    </div>
+                    <div class="info-banner">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <div>
+                            <strong>Coming soon:</strong> Connect a backend inquiry form (e.g. via Formspree, or
+                            save to MongoDB) to display customer enquiries here. Currently showing demo data.
+                        </div>
+                    </div>
+                    <div class="table-container mt-4">
+                        <table class="data-table">
+                            <thead>
+                                <tr><th>#</th><th>Name</th><th>Phone</th><th>Destination</th><th>Date</th><th>Status</th></tr>
+                            </thead>
+                            <tbody id="inq-tbody">
+                                <tr><td>1</td><td>Priya Sharma</td><td>+91 9876512340</td><td>Kashmir</td><td>2024-04-10</td><td><span class="status-pill pending">Pending</span></td></tr>
+                                <tr><td>2</td><td>Rahul Mehta</td><td>+91 9812345678</td><td>Dubai</td><td>2024-05-01</td><td><span class="status-pill replied">Replied</span></td></tr>
+                                <tr><td>3</td><td>Anjali Nair</td><td>+91 9898989898</td><td>Kerala</td><td>2024-04-22</td><td><span class="status-pill pending">Pending</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ── Contact Details Tab ───────────────────────── -->
+                <section id="contact" class="tab-content">
+                    <div class="section-header-flex">
+                        <h3>Contact Information</h3>
+                    </div>
+                    <div class="form-card">
+                        <p class="text-muted mb-4">These details appear in the footer, CTA section and WhatsApp widget of your website.</p>
+                        <form id="contact-form">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-phone"></i> Phone Number</label>
+                                    <input type="text" id="contact-phone" placeholder="+91 98765 43210" required>
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fa-brands fa-whatsapp"></i> WhatsApp Number</label>
+                                    <input type="text" id="contact-whatsapp" placeholder="919876543210" required>
+                                    <small>Enter without '+' for WhatsApp link to work correctly.</small>
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-envelope"></i> Email Address</label>
+                                    <input type="email" id="contact-email" placeholder="info@supratravels.in" required>
+                                </div>
+                            </div>
+                            <div class="form-group mt-4">
+                                <label><i class="fa-solid fa-location-dot"></i> Office Address</label>
+                                <textarea id="contact-address" rows="2" placeholder="123 Travel Avenue, Jubilee Hills…" required></textarea>
+                            </div>
+                            <div class="form-actions mt-4">
+                                <button type="submit" class="btn btn-primary" id="save-contact-btn">
+                                    <i class="fa-solid fa-floppy-disk"></i> Save Contact Details
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- ── Site Settings Tab ─────────────────────────── -->
+                <section id="settings" class="tab-content">
+                    <div class="section-header-flex">
+                        <h3>Site Settings</h3>
+                    </div>
+                    <div class="form-card">
+                        <form id="settings-form">
+                            <div class="form-group">
+                                <label>Hero Headline</label>
+                                <input type="text" id="setting-hero-headline"
+                                    placeholder="Explore The World With Supra Tours & Travels">
+                                <small>This is the large title shown on the homepage hero.</small>
+                            </div>
+                            <div class="form-group mt-4">
+                                <label>Hero Subtext</label>
+                                <textarea id="setting-hero-subtext" rows="2"
+                                    placeholder="Unforgettable journeys, curated experiences…"></textarea>
+                            </div>
+                            <div class="form-group mt-4">
+                                <label>About Us Description</label>
+                                <textarea id="setting-about-text" rows="4"
+                                    placeholder="With years of experience in the travel industry…"></textarea>
+                            </div>
+                            <div class="form-actions mt-4">
+                                <button type="submit" class="btn btn-primary" id="save-settings-btn">
+                                    <i class="fa-solid fa-floppy-disk"></i> Save Settings
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+            </div><!-- /content-area -->
+        </main>
+    </div><!-- /admin-app -->
+
+    <!-- Toast -->
+    <div id="toast" class="toast hidden">
+        <i class="fa-solid fa-check-circle" id="toast-icon"></i>
+        <span id="toast-message">Saved successfully!</span>
+    </div>
+
+    <!-- Confirm Dialog -->
+    <div id="confirm-overlay" class="confirm-overlay hidden">
+        <div class="confirm-box">
+            <h4><i class="fa-solid fa-triangle-exclamation"></i> Confirm Delete</h4>
+            <p id="confirm-text">Are you sure? This cannot be undone.</p>
+            <div class="confirm-actions">
+                <button class="btn btn-outline" id="confirm-no">Cancel</button>
+                <button class="btn btn-danger" id="confirm-yes">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+
+</html>
