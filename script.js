@@ -5,32 +5,32 @@ const API_BASE = window.SUPRA_API_URL || 'https://supratravels.onrender.com';
 
 // ── Static fallback data (shown if API is unavailable) ───────────────────────
 const FALLBACK_CONTACT = {
-    phone:    '+91 98765 43210',
+    phone: '+91 98765 43210',
     whatsapp: '919876543210',
-    email:    'info@supratravels.in',
-    address:  '124 Travel Avenue, Jubilee Hills, Hyderabad – 500033'
+    email: 'info@supratravels.in',
+    address: '124 Travel Avenue, Jubilee Hills, Hyderabad – 500033'
 };
 
 const FALLBACK_TRIPS = [
-    { _id:'f1', title:'Kerala Backwaters',  location:'Kerala, India',      image:'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=800&q=80', price:15999, duration:'5 Days / 4 Nights', badge:'Most Popular' },
-    { _id:'f2', title:'Majestic Kashmir',   location:'J&K, India',         image:'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=800&q=80', price:22499, duration:'6 Days / 5 Nights', badge:'20% OFF' },
-    { _id:'f3', title:'Goa Beach Escape',   location:'Goa, India',         image:'https://images.unsplash.com/photo-1583183575377-58a8f5b77b8d?auto=format&fit=crop&w=800&q=80', price:9999,  duration:'4 Days / 3 Nights', badge:'Weekend Deal' },
-    { _id:'f4', title:'Dubai Extravaganza', location:'Dubai, UAE',         image:'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80', price:54999, duration:'5 Days / 4 Nights', badge:'International' },
-    { _id:'f5', title:'Bali Paradise',      location:'Bali, Indonesia',    image:'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=800&q=80', price:49999, duration:'7 Days / 6 Nights', badge:'Best Seller' },
-    { _id:'f6', title:'Rajasthan Heritage', location:'Rajasthan, India',   image:'https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=800&q=80', price:18499, duration:'6 Days / 5 Nights', badge:'' }
+    { _id: 'f1', title: 'Kerala Backwaters', location: 'Kerala, India', image: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=800&q=80', price: 15999, duration: '5 Days / 4 Nights', badge: 'Most Popular' },
+    { _id: 'f2', title: 'Majestic Kashmir', location: 'J&K, India', image: 'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=800&q=80', price: 22499, duration: '6 Days / 5 Nights', badge: '20% OFF' },
+    { _id: 'f3', title: 'Goa Beach Escape', location: 'Goa, India', image: 'https://images.unsplash.com/photo-1583183575377-58a8f5b77b8d?auto=format&fit=crop&w=800&q=80', price: 9999, duration: '4 Days / 3 Nights', badge: 'Weekend Deal' },
+    { _id: 'f4', title: 'Dubai Extravaganza', location: 'Dubai, UAE', image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80', price: 54999, duration: '5 Days / 4 Nights', badge: 'International' },
+    { _id: 'f5', title: 'Bali Paradise', location: 'Bali, Indonesia', image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=800&q=80', price: 49999, duration: '7 Days / 6 Nights', badge: 'Best Seller' },
+    { _id: 'f6', title: 'Rajasthan Heritage', location: 'Rajasthan, India', image: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=800&q=80', price: 18499, duration: '6 Days / 5 Nights', badge: '' }
 ];
 
 const TESTIMONIALS = [
-    { name:'Priya Sharma',  avatar:'PS', rating:5, text:'Absolutely incredible experience! Supra Travels planned every detail of our Kashmir trip perfectly. The houseboat stay was magical.', trip:'Kashmir Trip' },
-    { name:'Rahul Mehta',   avatar:'RM', rating:5, text:'The Dubai package was beyond our expectations. Seamless coordination, beautiful hotels, and the team was available 24/7. Truly premium.', trip:'Dubai Package' },
-    { name:'Anjali Nair',   avatar:'AN', rating:5, text:'Kerala backwaters trip was a dream come true. The itinerary was crafted with so much care. Supra Travels really understands travellers!', trip:'Kerala Package' },
-    { name:'Vikram Patel',  avatar:'VP', rating:5, text:'Booked the Bali trip for our honeymoon. Every resort, every activity hand-picked for us. Absolutely romantic and stress-free. 10/10!', trip:'Bali Honeymoon' }
+    { name: 'Priya Sharma', avatar: 'PS', rating: 5, text: 'Absolutely incredible experience! Supra Travels planned every detail of our Kashmir trip perfectly. The houseboat stay was magical.', trip: 'Kashmir Trip' },
+    { name: 'Rahul Mehta', avatar: 'RM', rating: 5, text: 'The Dubai package was beyond our expectations. Seamless coordination, beautiful hotels, and the team was available 24/7. Truly premium.', trip: 'Dubai Package' },
+    { name: 'Anjali Nair', avatar: 'AN', rating: 5, text: 'Kerala backwaters trip was a dream come true. The itinerary was crafted with so much care. Supra Travels really understands travellers!', trip: 'Kerala Package' },
+    { name: 'Vikram Patel', avatar: 'VP', rating: 5, text: 'Booked the Bali trip for our honeymoon. Every resort, every activity hand-picked for us. Absolutely romantic and stress-free. 10/10!', trip: 'Bali Honeymoon' }
 ];
 
 document.addEventListener('DOMContentLoaded', async () => {
 
     // ── Load data: try API first, fall back to static ─────────────────────
-    let trips   = FALLBACK_TRIPS;
+    let trips = FALLBACK_TRIPS;
     let contact = FALLBACK_CONTACT;
 
     try {
@@ -59,10 +59,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // ── Apply contact info ────────────────────────────────────────────────
-    document.getElementById('footer-phone').textContent   = contact.phone;
-    document.getElementById('footer-email').textContent   = contact.email;
+    document.getElementById('footer-phone').textContent = contact.phone;
+    document.getElementById('footer-email').textContent = contact.email;
     document.getElementById('footer-address').textContent = contact.address;
-    document.getElementById('cta-phone').textContent      = contact.phone;
+    document.getElementById('cta-phone').textContent = contact.phone;
 
     const waFloat = document.getElementById('floating-whatsapp');
     waFloat.href = `https://wa.me/${contact.whatsapp}?text=Hi,%20I%20would%20like%20to%20plan%20a%20trip!`;
@@ -75,9 +75,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     container.innerHTML = '';
 
     trips.forEach((trip, i) => {
-        const delay      = (i % 3) + 1;
+        const delay = (i % 3) + 1;
         const isDiscount = trip.badge && trip.badge.toUpperCase().includes('OFF');
-        const badgeHtml  = trip.badge
+        const badgeHtml = trip.badge
             ? `<div class="badge ${isDiscount ? 'discount' : ''}">${trip.badge}</div>` : '';
 
         const card = document.createElement('div');
@@ -135,8 +135,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             testimonialTrack.appendChild(slide);
         });
 
-        let currentSlide  = 0;
-        const slides      = testimonialTrack.querySelectorAll('.testimonial-slide');
+        let currentSlide = 0;
+        const slides = testimonialTrack.querySelectorAll('.testimonial-slide');
         const dotsContainer = document.getElementById('testimonial-dots');
 
         slides.forEach((_, i) => {
@@ -163,9 +163,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // ── Counter Animation ─────────────────────────────────────────────────
     function animateCounter(el) {
         const target = +el.getAttribute('data-target');
-        const step   = target / (2000 / 16);
-        let current  = 0;
-        const timer  = setInterval(() => {
+        const step = target / (2000 / 16);
+        let current = 0;
+        const timer = setInterval(() => {
             current += step;
             if (current >= target) {
                 el.textContent = target.toLocaleString() + (el.dataset.suffix || '');
@@ -202,9 +202,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, 120);
 
     // ── Mobile Menu ───────────────────────────────────────────────────────
-    const hamburger  = document.getElementById('hamburger');
+    const hamburger = document.getElementById('hamburger');
     const mobileMenu = document.getElementById('mobile-menu');
-    const closeMenu  = document.getElementById('close-menu');
+    const closeMenu = document.getElementById('close-menu');
 
     if (hamburger && mobileMenu && closeMenu) {
         hamburger.addEventListener('click', () => {
@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             btn.style.background = '#16a34a';
             e.target.reset();
             setTimeout(() => {
-                btn.textContent    = 'Send Request';
+                btn.textContent = 'Send Request';
                 btn.style.background = '';
                 btn.disabled = false;
             }, 3000);
