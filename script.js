@@ -27,6 +27,132 @@ const TESTIMONIALS = [
     { name: 'Vikram Patel', avatar: 'VP', rating: 5, text: 'Booked the Bali trip for our honeymoon. Every resort, every activity hand-picked for us. Absolutely romantic and stress-free. 10/10!', trip: 'Bali Honeymoon' }
 ];
 
+// ── 3D GLOBE GLOBAL STATE ───────────────────────────────────────────────────
+let scene, camera, renderer, globeGroup;
+let isRotatingGlobe = true;
+let globeRotateTimeout;
+
+// Map locations to Latitude/Longitude for 3D Earth positioning
+const DEST_COORDS = {
+    'Kerala Backwaters': { lat: 10.85, lon: 76.27 },
+    'Majestic Kashmir': { lat: 34.08, lon: 74.79 },
+    'Goa Beach Escape': { lat: 15.29, lon: 74.12 },
+    'Dubai Extravaganza': { lat: 25.204, lon: 55.27 },
+    'Bali Paradise': { lat: -8.409, lon: 115.18 },
+    'Rajasthan Heritage': { lat: 27.02, lon: 74.21 }
+};
+
+// Get geographic coordinates for a destination (with deterministic hash fallback)
+function getCoordsForTrip(title, location) {
+    const t = title.toLowerCase();
+    const l = location.toLowerCase();
+    
+    if (t.includes('kerala') || l.includes('kerala')) return DEST_COORDS['Kerala Backwaters'];
+    if (t.includes('kashmir') || l.includes('kashmir') || l.includes('j&k')) return DEST_COORDS['Majestic Kashmir'];
+    if (t.includes('goa') || l.includes('goa')) return DEST_COORDS['Goa Beach Escape'];
+    if (t.includes('dubai') || l.includes('dubai')) return DEST_COORDS['Dubai Extravaganza'];
+    if (t.includes('bali') || l.includes('bali')) return DEST_COORDS['Bali Paradise'];
+    if (t.includes('rajasthan') || l.includes('rajasthan')) return DEST_COORDS['Rajasthan Heritage'];
+    
+    // Deterministic fallback coordinates for any new user packages
+    let hash = 0;
+    const str = title + location;
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const lat = (hash % 50) - 10; // -10 to 40
+    const lon = ((hash >> 8) % 110) + 40; // 40 to 150 (focused on EMEA / APAC)
+    return { lat, lon };
+}
+
+// Convert Lat/Lon coordinates to a Vector3 on the 3D Sphere surface
+function latLonToVector3(lat, lon, radius) {
+    const phi = (90 - lat) * (Math.PI / 180);
+    const theta = (lon + 180) * (Math.PI / 180);
+    const x = -(radius * Math.sin(phi) * Math.sin(theta));
+    const y = radius * Math.cos(phi);
+    const z = radius * Math.sin(phi) * Math.cos(theta);
+    return new THREE.Vector3(x, y, z);
+}
+
+// Generate a procedural high-tech canvas texture offline-safely
+function createProceduralEarthTexture() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1024;
+    canvas.height = 512;
+    const ctx = canvas.getContext('2d');
+    
+    // Depth space gradient
+    const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    grad.addColorStop(0, '#0a1731');
+    grad.addColorStop(0.5, '#0c224b');
+    grad.addColorStop(1, '#0e2b5e');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Latitude/longitude lines
+    ctx.strokeStyle = 'rgba(37, 99, 235, 0.22)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 36; i++) {
+        const x = (i / 36) * canvas.width;
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+    }
+    for (let j = 0; j <= 18; j++) {
+        const y = (j / 18) * canvas.height;
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+    }
+    
+    // Stylized orange neon landmasses
+    ctx.fillStyle = '#f97316';
+    ctx.shadowBlur = 12;
+    ctx.shadowColor = '#ea580c';
+    
+    const landmasses = [
+        { x: 730, y: 180, r: 60 }, { x: 750, y: 220, r: 50 }, { x: 690, y: 200, r: 40 },
+        { x: 800, y: 160, r: 45 }, { x: 830, y: 210, r: 35 }, { x: 770, y: 270, r: 25 }, // Asia
+        { x: 530, y: 140, r: 40 }, { x: 560, y: 110, r: 35 }, { x: 490, y: 130, r: 30 }, // Europe
+        { x: 540, y: 300, r: 70 }, { x: 560, y: 380, r: 45 }, { x: 610, y: 330, r: 35 }, // Africa
+        { x: 230, y: 150, r: 65 }, { x: 180, y: 130, r: 45 }, { x: 280, y: 180, r: 40 }, // N. America
+        { x: 300, y: 380, r: 55 }, { x: 330, y: 440, r: 35 }, { x: 270, y: 330, r: 30 }, // S. America
+        { x: 880, y: 370, r: 45 }, { x: 910, y: 390, r: 35 }, // Australia
+        { x: 380, y: 70, r: 40 } // Greenland
+    ];
+    
+    landmasses.forEach(c => {
+        ctx.beginPath();
+        ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.strokeStyle = 'rgba(249, 115, 22, 0.12)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(c.x, c.y, c.r + 14, 0, Math.PI * 2);
+        ctx.stroke();
+    });
+    
+    return new THREE.CanvasTexture(canvas);
+}
+
+// Rotate the globe smoothly to target Lat/Lon
+function rotateGlobeTo(lat, lon) {
+    if (!globeGroup) return;
+    
+    isRotatingGlobe = false;
+    
+    // Convert geographic coordinates to Euler angle offsets for Y and X axis rotations
+    const targetY = -(lon * Math.PI / 180) - Math.PI / 2;
+    const targetX = (lat * Math.PI / 180);
+    
+    gsap.killTweensOf(globeGroup.rotation);
+    gsap.to(globeGroup.rotation, {
+        x: targetX,
+        y: targetY,
+        duration: 1.6,
+        ease: 'power2.out'
+    });
+}
+
+// ── DOM CONTENT LOADED ───────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
 
     // ── Load data: try API first, fall back to static ─────────────────────
@@ -70,6 +196,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const waCtaLink = document.querySelector('.cta-wa');
     if (waCtaLink) waCtaLink.href = `https://wa.me/${contact.whatsapp}`;
 
+    // ── Initialize 3D Globe ───────────────────────────────────────────────
+    init3DGlobe(trips);
+
     // ── Render Packages ───────────────────────────────────────────────────
     const container = document.getElementById('packages-container');
     container.innerHTML = '';
@@ -108,8 +237,25 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </div>
             </div>
         `;
+        
+        // Dynamic hover alignment with the 3D globe coordinates
+        card.addEventListener('mouseenter', () => {
+            const coords = getCoordsForTrip(trip.title, trip.location);
+            rotateGlobeTo(coords.lat, coords.lon);
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            clearTimeout(globeRotateTimeout);
+            globeRotateTimeout = setTimeout(() => {
+                isRotatingGlobe = true;
+            }, 3000);
+        });
+
         container.appendChild(card);
     });
+
+    // Wire tilt effect to cards
+    init3DTilt();
 
     // ── Render Testimonials ───────────────────────────────────────────────
     const testimonialTrack = document.getElementById('testimonial-track');
@@ -239,3 +385,161 @@ document.addEventListener('DOMContentLoaded', async () => {
         }, 1200);
     });
 });
+
+// ── THREE.JS GLOBE BUILDER ───────────────────────────────────────────────────
+function init3DGlobe(trips) {
+    const container = document.getElementById('hero-3d-container');
+    if (!container) return;
+    
+    // Clear out fallback text or indicators
+    container.innerHTML = '';
+    
+    // Initialize WebGL checking
+    try {
+        const testCanvas = document.createElement('canvas');
+        const gl = testCanvas.getContext('webgl') || testCanvas.getContext('experimental-webgl');
+        if (!gl) throw new Error('WebGL not supported');
+    } catch (e) {
+        console.warn('WebGL is missing or disabled. Graceful static design is activated.', e.message);
+        container.style.display = 'none';
+        return;
+    }
+    
+    // Setup Scene, Camera
+    scene = new THREE.Scene();
+    
+    const width = container.clientWidth || 500;
+    const height = container.clientHeight || 500;
+    camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+    camera.position.z = 40;
+    
+    // Setup Renderer
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
+    
+    // Create Globe Group
+    globeGroup = new THREE.Group();
+    scene.add(globeGroup);
+    
+    // Earth Sphere Core
+    const earthGeo = new THREE.SphereGeometry(12, 64, 64);
+    const earthMat = new THREE.MeshPhongMaterial({
+        map: createProceduralEarthTexture(),
+        shininess: 30,
+        bumpScale: 0.1,
+        transparent: true,
+        opacity: 0.96
+    });
+    const earthMesh = new THREE.Mesh(earthGeo, earthMat);
+    globeGroup.add(earthMesh);
+    
+    // Holographic wireframe overlay shell
+    const wireMat = new THREE.MeshBasicMaterial({
+        color: 0x2563eb, // blue technological glow wireframe
+        wireframe: true,
+        transparent: true,
+        opacity: 0.08
+    });
+    const wireMesh = new THREE.Mesh(earthGeo, wireMat);
+    wireMesh.scale.setScalar(1.02);
+    globeGroup.add(wireMesh);
+    
+    // Add Glowing Pins for Destinations
+    trips.forEach(trip => {
+        const coords = getCoordsForTrip(trip.title, trip.location);
+        const pinPos = latLonToVector3(coords.lat, coords.lon, 12.0);
+        
+        const pinGroup = new THREE.Group();
+        pinGroup.position.copy(pinPos);
+        
+        // Orient pin pointing outwards from center
+        const direction = pinPos.clone().normalize();
+        const up = new THREE.Vector3(0, 1, 0);
+        pinGroup.quaternion.setFromUnitVectors(up, direction);
+        
+        // Blue spike
+        const spikeGeo = new THREE.ConeGeometry(0.2, 1.2, 8);
+        spikeGeo.translate(0, 0.6, 0); // pivot at base
+        const spikeMat = new THREE.MeshBasicMaterial({
+            color: 0x2563eb,
+            transparent: true,
+            opacity: 0.75
+        });
+        const spikeMesh = new THREE.Mesh(spikeGeo, spikeMat);
+        pinGroup.add(spikeMesh);
+        
+        // Orange glowing indicator tip
+        const glowGeo = new THREE.SphereGeometry(0.35, 8, 8);
+        glowGeo.translate(0, 1.2, 0);
+        const glowMat = new THREE.MeshBasicMaterial({
+            color: 0xf97316,
+            transparent: true,
+            opacity: 0.95
+        });
+        const glowMesh = new THREE.Mesh(glowGeo, glowMat);
+        pinGroup.add(glowMesh);
+        
+        globeGroup.add(pinGroup);
+    });
+    
+    // Lights Setup
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
+    scene.add(ambientLight);
+    
+    const directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.9);
+    directionalLight1.position.set(5, 5, 20);
+    scene.add(directionalLight1);
+    
+    const directionalLight2 = new THREE.DirectionalLight(0x2563eb, 0.6); // Soft blue rim light
+    directionalLight2.position.set(-15, 10, -10);
+    scene.add(directionalLight2);
+    
+    // Render loop animation
+    function animateGlobe() {
+        requestAnimationFrame(animateGlobe);
+        
+        if (isRotatingGlobe) {
+            globeGroup.rotation.y += 0.0025;
+        }
+        
+        renderer.render(scene, camera);
+    }
+    
+    animateGlobe();
+    
+    // Resize handler
+    window.addEventListener('resize', () => {
+        const newW = container.clientWidth;
+        const newH = container.clientHeight;
+        camera.aspect = newW / newH;
+        camera.updateProjectionMatrix();
+        renderer.setSize(newW, newH);
+    });
+}
+
+// ── CUSTOM 3D TILT EFFECT ────────────────────────────────────────────────────
+function init3DTilt() {
+    const tiltElements = document.querySelectorAll('.card, .service-card, .testimonial-card, .about-image');
+    
+    tiltElements.forEach(el => {
+        el.addEventListener('mousemove', e => {
+            const rect = el.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const xc = rect.width / 2;
+            const yc = rect.height / 2;
+            
+            // Limit angles to 12 degrees max rotation
+            const angleX = ((yc - y) / yc) * 12;
+            const angleY = -(((xc - x) / xc) * 12);
+            
+            el.style.transform = `rotateX(${angleX}deg) rotateY(${angleY}deg) scale3d(1.02, 1.02, 1.02)`;
+        });
+        
+        el.addEventListener('mouseleave', () => {
+            el.style.transform = `rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+        });
+    });
+}

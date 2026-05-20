@@ -16,6 +16,11 @@
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- 3D Redesign Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -69,50 +74,55 @@
         </div>
         <div class="hero-overlay"></div>
 
-        <div class="container hero-content">
-            <span class="subtitle reveal-up">
-                <i class="fa-solid fa-location-dot"></i>&nbsp; ELEVATE YOUR JOURNEY
-            </span>
-            <h1 class="reveal-up delay-1" id="hero-headline">
-                Explore The World With <br>
-                <span class="highlight">Supra Tours &amp; Travels</span>
-            </h1>
-            <p class="reveal-up delay-2" id="hero-subtext">
-                Unforgettable journeys, curated experiences, and the best prices guaranteed.
-                Your perfect vacation starts here.
-            </p>
+        <div class="container hero-grid">
+            <div class="hero-left-content">
+                <span class="subtitle reveal-up">
+                    <i class="fa-solid fa-location-dot"></i>&nbsp; ELEVATE YOUR JOURNEY
+                </span>
+                <h1 class="reveal-up delay-1" id="hero-headline">
+                    Explore The World With <br>
+                    <span class="highlight">Supra Tours &amp; Travels</span>
+                </h1>
+                <p class="reveal-up delay-2" id="hero-subtext">
+                    Unforgettable journeys, curated experiences, and the best prices guaranteed.
+                    Your perfect vacation starts here.
+                </p>
 
-            <div class="search-box glass-panel reveal-up delay-3">
-                <form class="search-form" id="search-form">
-                    <div class="input-group">
-                        <label for="destination">
-                            <i class="fa-solid fa-location-dot"></i> Destination
-                        </label>
-                        <input type="text" id="destination" placeholder="Where to? (e.g. Kerala)">
-                    </div>
-                    <div class="divider"></div>
-                    <div class="input-group">
-                        <label for="date">
-                            <i class="fa-regular fa-calendar"></i> Travel Date
-                        </label>
-                        <input type="date" id="date">
-                    </div>
-                    <div class="divider"></div>
-                    <div class="input-group">
-                        <label for="guests">
-                            <i class="fa-solid fa-user-group"></i> Guests
-                        </label>
-                        <select id="guests">
-                            <option value="1">1 Person</option>
-                            <option value="2" selected>2 Persons</option>
-                            <option value="3">3 Persons</option>
-                            <option value="4+">4+ Persons</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-search">
-                        <i class="fa-solid fa-magnifying-glass"></i> Search
-                    </button>
-                </form>
+                <div class="search-box glass-panel reveal-up delay-3">
+                    <form class="search-form" id="search-form">
+                        <div class="input-group">
+                            <label for="destination">
+                                <i class="fa-solid fa-location-dot"></i> Destination
+                            </label>
+                            <input type="text" id="destination" placeholder="Where to? (e.g. Kerala)">
+                        </div>
+                        <div class="divider"></div>
+                        <div class="input-group">
+                            <label for="date">
+                                <i class="fa-regular fa-calendar"></i> Travel Date
+                            </label>
+                            <input type="date" id="date">
+                        </div>
+                        <div class="divider"></div>
+                        <div class="input-group">
+                            <label for="guests">
+                                <i class="fa-solid fa-user-group"></i> Guests
+                            </label>
+                            <select id="guests">
+                                <option value="1">1 Person</option>
+                                <option value="2" selected>2 Persons</option>
+                                <option value="3">3 Persons</option>
+                                <option value="4+">4+ Persons</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-search">
+                            <i class="fa-solid fa-magnifying-glass"></i> Search
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="hero-right-content reveal-up delay-3" id="hero-3d-container">
+                <!-- WebGL Globe renders here -->
             </div>
         </div>
 
