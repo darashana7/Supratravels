@@ -234,7 +234,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (waCtaLink) waCtaLink.href = `https://wa.me/${contact.whatsapp}`;
 
     // ── Initialize 3D Globe ───────────────────────────────────────────────
-    init3DGlobe(trips);
+    if (typeof THREE !== 'undefined') {
+        try {
+            init3DGlobe(trips);
+        } catch (e) {
+            console.error('Error rendering 3D Globe:', e);
+        }
+    } else {
+        console.warn('Three.js is not loaded. High-fidelity CSS fallback remains active.');
+    }
+
 
     // ── Render Packages/Routes ────────────────────────────────────────────
     const container = document.getElementById('packages-container');

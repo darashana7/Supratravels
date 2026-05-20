@@ -258,6 +258,55 @@ h1, h2, h3, h4 {
     height: auto;
 }
 
+/* Globe Fallback (if WebGL/Three.js fails or is offline) */
+.globe-fallback {
+    position: relative;
+    width: 320px;
+    height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(30, 58, 138, 0.4) 0%, rgba(15, 35, 71, 0.1) 70%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 40px rgba(37, 99, 235, 0.25), inset 0 0 30px rgba(37, 99, 235, 0.15);
+}
+
+.globe-fallback-inner {
+    font-size: 8rem;
+    background: linear-gradient(135deg, #ffffff 30%, #f97316 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 15px rgba(249, 115, 22, 0.4));
+    animation: slowSpin 25s infinite linear;
+}
+
+.pulse-ring {
+    position: absolute;
+    border: 1px solid rgba(249, 115, 22, 0.25);
+    border-radius: 50%;
+    inset: -20px;
+    animation: pulseGlow 4s infinite ease-in-out;
+    pointer-events: none;
+}
+
+.pulse-ring.ring-2 {
+    inset: -45px;
+    border-color: rgba(37, 99, 235, 0.15);
+    animation-delay: 2s;
+}
+
+@keyframes slowSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes pulseGlow {
+    0%, 100% { transform: scale(0.95); opacity: 0.3; }
+    50% { transform: scale(1.05); opacity: 0.8; }
+}
+
+
 .subtitle {
     display: inline-flex;
     align-items: center;
