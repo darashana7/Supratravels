@@ -1,9 +1,12 @@
 // ── API base URL ─────────────────────────────────────────────────────────────
-const API_BASE = window.SUPRA_API_URL || 'https://supratravels.onrender.com';
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:5000'
+    : 'https://supratravels.onrender.com';
 
 // ── State ────────────────────────────────────────────────────────────────────
 let authToken = localStorage.getItem('supra_admin_token');
 let trips = [];
+let coTravelPostings = [];
 
 // ── DOM helpers ──────────────────────────────────────────────────────────────
 const $ = id => document.getElementById(id);
@@ -72,6 +75,7 @@ function showApp() {
     $('login-screen').classList.add('hidden');
     $('admin-app').classList.remove('hidden');
     loadDashboard();
+    loadCoTravelPostings();
 }
 
 function wireLogin() {
@@ -134,8 +138,9 @@ function wireLogout() {
 
 // ── Navigation ────────────────────────────────────────────────────────────────
 const PAGE_TITLES = {
-    dashboard: 'Dashboard',
-    packages: 'Manage Packages',
+    dashboard: 'Dashboard Overview',
+    packages: 'Manage Routes',
+    'co-travel': 'Co-Travel Pools',
     inquiries: 'Inquiries',
     contact: 'Contact Details',
     settings: 'Site Settings'
@@ -504,3 +509,80 @@ function showToast(msg, type = 'success') {
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => toast.classList.add('hidden'), 4000);
 }
+
+// ── Co-Travel administration ───────────────────────────────────────────────
+async function loadCoTravelPostings() {
+    try {
+        const res = await fetch(`${API_BASE}/api/rideshare`);
+        if (res.ok) {
+            coTravelPostings = await res.json();
+        }
+    } catch {
+        showToast('Could not load co-travel postings', 'error');
+    }
+    renderCoTravelTable();
+}
+
+function renderCoTravelTable() {
+    const tbody = $('cotravel-tbody');
+    const countEl = $('cotravel-count');
+    if (countEl) countEl.textContent = `${coTravelPostings.length} active`;
+    
+    if (!tbody) return;
+    
+    if (!coTravelPostings.length) {
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">
+            No co-travel postings active.
+        </td></tr>`;
+        return;
+    }
+    
+    tbody.innerHTML = coTravelPostings.map(post => {
+        const dateStr = new Date(post.date).toLocaleDateString('en-IN', {
+            year: 'numeric', month: 'short', day: 'numeric'
+        });
+        const isOffering = post.type === 'offering';
+        const typeBadge = isOffering 
+            ? '<span class="status-pill replied">Offering</span>' 
+            : '<span class="status-pill pending">Seeking</span>';
+            
+        return `
+            <tr>
+                <td><strong>${post.name}</strong></td>
+                <td>${post.phone}</td>
+                <td>${post.from} → ${post.to}</td>
+                <td>${dateStr}</td>
+                <td>${post.seats}</td>
+                <td>${typeBadge}</td>
+                <td>
+                    <button class="action-btn delete" onclick="deleteCoTravel('${post._id}','${post.name}')" title="Delete">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+async function deleteCoTravel(id, name) {
+    if (!confirm(`Are you sure you want to delete the posting by "${name}"?`)) return;
+    try {
+        const res = await fetch(`${API_BASE}/api/rideshare/${id}`, {
+            method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${authToken}`
+            }
+        });
+        if (res.ok) {
+            showToast('Posting deleted successfully', 'success');
+            await loadCoTravelPostings();
+        } else {
+            showToast('Delete failed', 'error');
+        }
+    } catch {
+        showToast('Network error', 'error');
+    }
+}
+window.deleteCoTravel = deleteCoTravel;
+window.loadCoTravelPostings = loadCoTravelPostings;
+

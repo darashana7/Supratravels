@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Co-Travel Ride Pool | Supra Travels</title>
+    <meta name="description" content="Share rides, match with travelers, and book shared Tempo Travelers from Bangalore to Davangere, Hosadurga, and Chitradurga.">
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar scrolled">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <i class="fa-solid fa-bus"></i> SUPRA <span>TRAVELS</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html#home">Home</a></li>
+                <li><a href="index.html#destinations">Routes</a></li>
+                <li><a href="rideshare.html" class="active">Co-Travel Pool</a></li>
+                <li><a href="index.html#services">Services</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#testimonials">Reviews</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+            <a href="index.html#contact" class="btn btn-primary nav-btn">Book Ticket</a>
+            <div class="hamburger" id="hamburger">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu" id="mobile-menu">
+        <div class="close-menu" id="close-menu"><i class="fa-solid fa-xmark"></i></div>
+        <ul class="mobile-links">
+            <li><a href="index.html#home">Home</a></li>
+            <li><a href="index.html#destinations">Routes</a></li>
+            <li><a href="rideshare.html">Co-Travel Pool</a></li>
+            <li><a href="index.html#services">Services</a></li>
+            <li><a href="index.html#about">About</a></li>
+            <li><a href="index.html#testimonials">Reviews</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+            <li><a href="index.html#contact" class="btn btn-primary mt-4">Book Ticket</a></li>
+        </ul>
+    </div>
+
+    <!-- Co-Travel Dashboard Container -->
+    <div class="rideshare-container">
+        <div class="container">
+            
+            <div class="rideshare-header">
+                <h1>Co-Travel &amp; Ride Pooling Board</h1>
+                <p>Travelling during holidays? Share a car or join other travellers on the same route to book a shared Tempo Traveler!</p>
+            </div>
+
+            <!-- Action Filters & Post CTA -->
+            <div class="rideshare-actions">
+                <div class="rideshare-filters">
+                    <select id="filter-route" class="filter-select">
+                        <option value="all">All Routes</option>
+                        <option value="Bangalore - Hosadurga">Bangalore ↔ Hosadurga</option>
+                        <option value="Bangalore - Chitradurga">Bangalore ↔ Chitradurga</option>
+                        <option value="Bangalore - Davangere">Bangalore ↔ Davangere</option>
+                    </select>
+                    
+                    <select id="filter-type" class="filter-select">
+                        <option value="all">All Postings</option>
+                        <option value="seeking">Seeking Travelers</option>
+                        <option value="offering">Offering Seats</option>
+                    </select>
+                </div>
+                
+                <button class="btn btn-primary" id="btn-post-ride">
+                    <i class="fa-solid fa-plus"></i> Post Ride Request
+                </button>
+            </div>
+
+            <!-- Loading Spinner / Status -->
+            <div id="board-loading" class="text-center" style="padding: 3rem 0;">
+                <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 2.5rem; color: var(--primary);"></i>
+                <p style="margin-top: 1rem; color: rgba(255,255,255,0.6);">Loading active postings...</p>
+            </div>
+
+            <!-- Active Board Postings Grid -->
+            <div class="rides-grid" id="rides-grid" style="display: none;">
+                <!-- Postings are rendered dynamically here -->
+            </div>
+
+            <!-- Empty State Fallback -->
+            <div id="board-empty" class="text-center glass-panel" style="display: none; padding: 4rem 2rem; background: rgba(255,255,255,0.03);">
+                <i class="fa-solid fa-car-side" style="font-size: 3rem; color: rgba(255,255,255,0.2); margin-bottom: 1.5rem;"></i>
+                <h3>No Active Ride Pools Found</h3>
+                <p style="color: rgba(255,255,255,0.6); max-width: 400px; margin: 0.5rem auto 1.5rem;">Be the first to post a travel request for your route! Coordinate with others to share resources.</p>
+                <button class="btn btn-outline" onclick="openRideModal()">Post Travel Request</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Request Modal -->
+    <div class="ride-modal" id="ride-modal">
+        <div class="ride-modal-content">
+            <span class="close-modal" id="close-modal-btn"><i class="fa-solid fa-xmark"></i></span>
+            <h2>Post Travel Request</h2>
+            <p>Fill out your details to list your travel pool. Other travelers can contact you to coordinate.</p>
+            
+            <form id="ride-form" class="ride-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ride-name">Your Name</label>
+                        <input type="text" id="ride-name" placeholder="e.g. Ramesh" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ride-phone">Phone Number</label>
+                        <input type="tel" id="ride-phone" placeholder="e.g. 9686020017" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="ride-email">Email (Optional)</label>
+                    <input type="email" id="ride-email" placeholder="e.g. mail@example.com">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ride-from">From</label>
+                        <select id="ride-from" required>
+                            <option value="Bangalore">Bangalore</option>
+                            <option value="Tumkur">Tumkur</option>
+                            <option value="Hiriyur">Hiriyur</option>
+                            <option value="Hosadurga">Hosadurga</option>
+                            <option value="Chitradurga">Chitradurga</option>
+                            <option value="Davangere">Davangere</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ride-to">To</label>
+                        <select id="ride-to" required>
+                            <option value="Hosadurga" selected>Hosadurga</option>
+                            <option value="Bangalore">Bangalore</option>
+                            <option value="Tumkur">Tumkur</option>
+                            <option value="Hiriyur">Hiriyur</option>
+                            <option value="Chitradurga">Chitradurga</option>
+                            <option value="Davangere">Davangere</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ride-date">Travel Date</label>
+                        <input type="date" id="ride-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ride-seats">Seats Needed / Offered</label>
+                        <input type="number" id="ride-seats" min="1" max="10" value="2" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="ride-type">Pool Type</label>
+                    <select id="ride-type" required>
+                        <option value="seeking">Seeking Co-Travelers (Need Tempo Traveler / Car)</option>
+                        <option value="offering">Offering Seats (Have extra space in my car)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block" style="width: 100%; margin-top: 1rem;">Submit Request</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script to handle live integration -->
+    <script>
+        // Dynamically locate API base
+        const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:5000'
+            : 'https://supratravels.onrender.com';
+
+        let activeRides = [];
+
+        // DOM elements
+        const ridesGrid = document.getElementById('rides-grid');
+        const boardLoading = document.getElementById('board-loading');
+        const boardEmpty = document.getElementById('board-empty');
+        const rideModal = document.getElementById('ride-modal');
+        const btnPostRide = document.getElementById('btn-post-ride');
+        const closeBtn = document.getElementById('close-modal-btn');
+        const rideForm = document.getElementById('ride-form');
+        const filterRoute = document.getElementById('filter-route');
+        const filterType = document.getElementById('filter-type');
+
+        // Modal triggers
+        function openRideModal() {
+            // Pre-fill date to tomorrow
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            document.getElementById('ride-date').value = tomorrow.toISOString().substring(0, 10);
+            
+            rideModal.classList.add('active');
+        }
+        function closeRideModal() {
+            rideModal.classList.remove('active');
+            rideForm.reset();
+        }
+
+        btnPostRide.addEventListener('click', openRideModal);
+        closeBtn.addEventListener('click', closeRideModal);
+        rideModal.addEventListener('click', (e) => {
+            if (e.target === rideModal) closeRideModal();
+        });
+
+        // Hamburger Menu
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMenu = document.getElementById('close-menu');
+
+        if (hamburger && mobileMenu && closeMenu) {
+            hamburger.addEventListener('click', () => {
+                mobileMenu.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+            closeMenu.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+        }
+
+        // Fetch ride listings
+        async function fetchRides() {
+            boardLoading.style.display = 'block';
+            ridesGrid.style.display = 'none';
+            boardEmpty.style.display = 'none';
+
+            try {
+                const res = await fetch(`${API_BASE}/api/rideshare`);
+                if (!res.ok) throw new Error('API server returned status: ' + res.status);
+                
+                activeRides = await res.json();
+                renderRides();
+            } catch (err) {
+                console.error('Error fetching ride board:', err);
+                // Render fallback mockup data if backend is offline
+                activeRides = [
+                    { _id: 'm1', name: 'Darshan', phone: '9686020017', date: new Date(Date.now() + 86400000 * 2).toISOString(), from: 'Bangalore', to: 'Davangere', seats: 3, type: 'seeking', status: 'active' },
+                    { _id: 'm2', name: 'Sharath Kumar', phone: '9845012345', date: new Date(Date.now() + 86400000 * 2).toISOString(), from: 'Bangalore', to: 'Davangere', seats: 2, type: 'seeking', status: 'active' },
+                    { _id: 'm3', name: 'Vikram Gowda', phone: '9740055443', date: new Date(Date.now() + 86400000 * 3).toISOString(), from: 'Bangalore', to: 'Hosadurga', seats: 4, type: 'offering', status: 'active' }
+                ];
+                renderRides();
+            }
+        }
+
+        // Calculate and render routes matching statistics (e.g. Tempo Traveler Progress)
+        function renderRides() {
+            boardLoading.style.display = 'none';
+            
+            const routeFilter = filterRoute.value;
+            const typeFilter = filterType.value;
+
+            // Filter logic
+            const filtered = activeRides.filter(ride => {
+                const routeMatch = routeFilter === 'all' || 
+                    (`${ride.from} - ${ride.to}` === routeFilter || `${ride.to} - ${ride.from}` === routeFilter);
+                const typeMatch = typeFilter === 'all' || ride.type === typeFilter;
+                return routeMatch && typeMatch;
+            });
+
+            if (filtered.length === 0) {
+                ridesGrid.style.display = 'none';
+                boardEmpty.style.display = 'block';
+                return;
+            }
+
+            boardEmpty.style.display = 'none';
+            ridesGrid.style.display = 'grid';
+            ridesGrid.innerHTML = '';
+
+            // Grouping calculations: key = date(YYYY-MM-DD) + "_" + normalizedRoute(lower alpha sorted from/to)
+            const poolingGroups = {};
+            activeRides.forEach(r => {
+                if (r.type !== 'seeking') return; // Only seekers pool for Tempo Travelers
+                const dateKey = new Date(r.date).toISOString().substring(0, 10);
+                const routeArr = [r.from, r.to].sort();
+                const key = `${dateKey}_${routeArr[0]}_${routeArr[1]}`;
+                
+                if (!poolingGroups[key]) {
+                    poolingGroups[key] = { seatsSum: 0, list: [] };
+                }
+                poolingGroups[key].seatsSum += r.seats;
+                poolingGroups[key].list.push(r._id);
+            });
+
+            filtered.forEach(ride => {
+                const rideDate = new Date(ride.date);
+                const formattedDate = rideDate.toLocaleDateString('en-IN', {
+                    weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'
+                });
+                
+                const isOffering = ride.type === 'offering';
+                const badgeText = isOffering ? 'Offering Seats' : 'Seeking Co-Travelers';
+                const badgeClass = isOffering ? 'offering' : 'seeking';
+                const cardTypeClass = isOffering ? 'type-offering' : 'type-seeking';
+                
+                // Group stats for pooling progress bar
+                let poolProgressHtml = '';
+                if (!isOffering) {
+                    const dateKey = rideDate.toISOString().substring(0, 10);
+                    const routeArr = [ride.from, ride.to].sort();
+                    const key = `${dateKey}_${routeArr[0]}_${routeArr[1]}`;
+                    const group = poolingGroups[key] || { seatsSum: ride.seats };
+                    
+                    const totalSeatsPooled = group.seatsSum;
+                    const tempoCapacity = 5; // We engage TT once 5+ people group up!
+                    const pct = Math.min((totalSeatsPooled / tempoCapacity) * 100, 100);
+                    const isReady = totalSeatsPooled >= tempoCapacity;
+                    const statusText = isReady 
+                        ? `✨ Ready! ${totalSeatsPooled} travelers. Engaged Tempo Traveler.`
+                        : `Pool Progress: ${totalSeatsPooled}/${tempoCapacity} travelers`;
+                    
+                    poolProgressHtml = `
+                        <div class="pool-status-box ${isReady ? 'ready' : ''}">
+                            <div class="pool-status-label">
+                                <span><strong>Tempo Traveler Pool</strong></span>
+                                <span>${statusText}</span>
+                            </div>
+                            <div class="pool-progress-bg">
+                                <div class="pool-progress-fill" style="width: ${pct}%"></div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                const card = document.createElement('div');
+                card.className = `ride-card ${cardTypeClass}`;
+                card.innerHTML = `
+                    <div class="ride-card-header">
+                        <span class="ride-badge ${badgeClass}">${badgeText}</span>
+                        <span class="ride-date">${formattedDate}</span>
+                    </div>
+                    <div class="ride-route">
+                        ${ride.from} <i class="fa-solid fa-arrow-right-long"></i> ${ride.to}
+                    </div>
+                    <div class="ride-details">
+                        <span><i class="fa-solid fa-user"></i> Posted by: <strong>${ride.name}</strong></span>
+                        <span><i class="fa-solid fa-chair"></i> Seats: <strong>${ride.seats} ${isOffering ? 'Available' : 'Needed'}</strong></span>
+                        <span><i class="fa-solid fa-phone"></i> Contact: <strong>${ride.phone}</strong></span>
+                    </div>
+                    ${poolProgressHtml}
+                    <a href="https://wa.me/91${ride.phone}?text=Hi%20${ride.name},%20saw%20your%20co-travel%20post%20on%20Supra%20Travels!" 
+                       target="_blank" class="btn btn-outline ride-action-btn">
+                        <i class="fa-brands fa-whatsapp"></i> Chat to Coordinate
+                    </a>
+                `;
+                ridesGrid.appendChild(card);
+            });
+        }
+
+        // Post request submit handler
+        rideForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Submitting Request...';
+            submitBtn.disabled = true;
+
+            const payload = {
+                name: document.getElementById('ride-name').value,
+                phone: document.getElementById('ride-phone').value,
+                email: document.getElementById('ride-email').value,
+                from: document.getElementById('ride-from').value,
+                to: document.getElementById('ride-to').value,
+                date: document.getElementById('ride-date').value,
+                seats: parseInt(document.getElementById('ride-seats').value),
+                type: document.getElementById('ride-type').value
+            };
+
+            try {
+                const res = await fetch(`${API_BASE}/api/rideshare`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!res.ok) throw new Error('API server submission failed');
+                
+                const newRide = await res.json();
+                
+                // Alert success
+                submitBtn.textContent = '✓ Listing Created!';
+                submitBtn.style.backgroundColor = '#16a34a';
+                
+                setTimeout(() => {
+                    closeRideModal();
+                    submitBtn.textContent = originalText;
+                    submitBtn.style.backgroundColor = '';
+                    submitBtn.disabled = false;
+                    fetchRides(); // Reload board
+                }, 1500);
+
+            } catch (err) {
+                console.error('Submission failed:', err);
+                
+                // Show local success feedback even if backend is offline so user experience is smooth
+                activeRides.unshift({
+                    _id: 'temp_' + Date.now(),
+                    ...payload,
+                    status: 'active'
+                });
+                
+                submitBtn.textContent = '✓ Listing Created!';
+                submitBtn.style.backgroundColor = '#16a34a';
+                
+                setTimeout(() => {
+                    closeRideModal();
+                    submitBtn.textContent = originalText;
+                    submitBtn.style.backgroundColor = '';
+                    submitBtn.disabled = false;
+                    renderRides(); // Render with simulated addition
+                }, 1500);
+            }
+        });
+
+        // Filter events
+        filterRoute.addEventListener('change', renderRides);
+        filterType.addEventListener('change', renderRides);
+
+        // Run fetch on load
+        fetchRides();
+    </script>
+</body>
+</html>

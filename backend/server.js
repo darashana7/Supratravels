@@ -7,6 +7,7 @@ require('dotenv').config();
 const authRoutes  = require('./routes/auth');
 const tripRoutes  = require('./routes/trips');
 const configRoutes = require('./routes/config');
+const rideRoutes   = require('./routes/rideshare');
 
 const app  = express();
 const PORT = process.env.PORT || 5000;
@@ -25,6 +26,7 @@ app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 app.use('/api/auth',   authRoutes);
 app.use('/api/trips',  tripRoutes);
 app.use('/api/config', configRoutes);
+app.use('/api/rideshare', rideRoutes);
 
 // Health check
 app.get('/api/health', (_req, res) => res.json({ status: 'ok', ts: new Date() }));

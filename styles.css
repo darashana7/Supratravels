@@ -877,3 +877,326 @@ h1, h2, h3, h4 {
         height: 320px;
     }
 }
+
+/* ── Co-Travel Ride Pooling Board ────────────────────────────────────── */
+.rideshare-container {
+    padding-top: 8rem;
+    padding-bottom: 5rem;
+    min-height: 85vh;
+    background: radial-gradient(circle at 10% 20%, #0a1931 0%, #0f2347 40%, #050b14 100%);
+    color: #ffffff;
+}
+
+.rideshare-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+}
+
+.rideshare-header h1 {
+    font-size: 3rem;
+    color: #ffffff;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ffffff 30%, #f97316 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.rideshare-header p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.rideshare-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.rideshare-filters {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.filter-select {
+    background: rgba(15, 35, 71, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    padding: 0.75rem 1.25rem;
+    border-radius: 50px;
+    outline: none;
+    font-size: 0.95rem;
+    transition: var(--transition-fast);
+}
+
+.filter-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 10px rgba(249, 115, 22, 0.2);
+}
+
+.rides-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3.5rem;
+}
+
+.ride-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    transition: var(--transition-slow);
+    position: relative;
+    overflow: hidden;
+}
+
+.ride-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--primary);
+}
+
+.ride-card.type-seeking::before {
+    background: #06b6d4; /* Cyan for seeking */
+}
+
+.ride-card.type-offering::before {
+    background: var(--primary); /* Orange for offering */
+}
+
+.ride-card:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.ride-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+}
+
+.ride-badge {
+    padding: 0.3rem 0.85rem;
+    border-radius: 50px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.ride-badge.seeking {
+    background: rgba(6, 182, 212, 0.15);
+    color: #22d3ee;
+    border: 1px solid rgba(6, 182, 212, 0.25);
+}
+
+.ride-badge.offering {
+    background: rgba(249, 115, 22, 0.15);
+    color: #fdba74;
+    border: 1px solid rgba(249, 115, 22, 0.25);
+}
+
+.ride-date {
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.ride-route {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.ride-route i {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.ride-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.ride-details span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.ride-details i {
+    width: 18px;
+    color: var(--primary);
+}
+
+.ride-card.type-seeking .ride-details i {
+    color: #06b6d4;
+}
+
+/* Tempo Traveler Pool Progress Gauge */
+.pool-status-box {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: var(--radius-sm);
+    padding: 0.85rem;
+    margin-top: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pool-status-label {
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.4rem;
+}
+
+.pool-progress-bg {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.pool-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2563eb, #3b82f6);
+    width: 0;
+    transition: width 0.6s ease;
+}
+
+.pool-status-box.ready .pool-progress-fill {
+    background: linear-gradient(90deg, #10b981, #059669); /* Green when active */
+}
+
+/* Ride Booking Action button */
+.ride-action-btn {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+}
+
+/* Modal Form Styles */
+.ride-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(5, 11, 20, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.ride-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.ride-modal-content {
+    background: #0f172a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: 500px;
+    width: 90%;
+    border-radius: var(--radius);
+    padding: 2.25rem;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+    position: relative;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.ride-modal.active .ride-modal-content {
+    transform: scale(1);
+}
+
+.close-modal {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.close-modal:hover {
+    color: #ffffff;
+}
+
+.ride-modal h2 {
+    color: #ffffff;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.ride-modal p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    margin-bottom: 1.75rem;
+}
+
+.ride-form .form-group {
+    margin-bottom: 1.25rem;
+}
+
+.ride-form .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.ride-form label {
+    display: block;
+    font-size: 0.88rem;
+    margin-bottom: 0.4rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.ride-form input,
+.ride-form select {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    padding: 0.8rem 1rem;
+    border-radius: var(--radius-sm);
+    outline: none;
+    font-size: 0.95rem;
+    transition: var(--transition-fast);
+}
+
+.ride-form input:focus,
+.ride-form select:focus {
+    border-color: var(--primary);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.ride-form select option {
+    background: #0f172a;
+    color: #ffffff;
+}
+

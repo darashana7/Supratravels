@@ -18,7 +18,7 @@
     <div id="login-screen" class="login-screen">
         <div class="login-card glass-panel">
             <div class="login-logo">
-                <i class="fa-solid fa-plane-departure"></i> SUPRA <span>ADMIN</span>
+                <i class="fa-solid fa-bus"></i> SUPRA <span>ADMIN</span>
             </div>
             <h2>Welcome back</h2>
             <p class="login-subtitle">Sign in to manage your travel website</p>
@@ -52,7 +52,7 @@
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <a href="index.html" class="logo" target="_blank">
-                    <i class="fa-solid fa-plane-departure"></i> SUPRA <span>ADMIN</span>
+                    <i class="fa-solid fa-bus"></i> SUPRA <span>ADMIN</span>
                 </a>
             </div>
 
@@ -61,7 +61,10 @@
                     <i class="fa-solid fa-chart-pie"></i> Dashboard
                 </li>
                 <li data-tab="packages">
-                    <i class="fa-solid fa-suitcase-rolling"></i> Manage Packages
+                    <i class="fa-solid fa-route"></i> Manage Routes
+                </li>
+                <li data-tab="co-travel">
+                    <i class="fa-solid fa-people-group"></i> Co-Travel Pools
                 </li>
                 <li data-tab="inquiries">
                     <i class="fa-solid fa-envelope-open-text"></i> Inquiries
@@ -291,6 +294,34 @@
                                 <tr><td>1</td><td>Priya Sharma</td><td>+91 9876512340</td><td>Kashmir</td><td>2024-04-10</td><td><span class="status-pill pending">Pending</span></td></tr>
                                 <tr><td>2</td><td>Rahul Mehta</td><td>+91 9812345678</td><td>Dubai</td><td>2024-05-01</td><td><span class="status-pill replied">Replied</span></td></tr>
                                 <tr><td>3</td><td>Anjali Nair</td><td>+91 9898989898</td><td>Kerala</td><td>2024-04-22</td><td><span class="status-pill pending">Pending</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ── Co-Travel Pools Tab ────────────────────────── -->
+                <section id="co-travel" class="tab-content">
+                    <div class="section-header-flex">
+                        <h3>Co-Travel &amp; Ride Pooling Postings</h3>
+                        <span class="badge-count" id="cotravel-count">0 active</span>
+                    </div>
+                    <div class="table-container mt-4">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Route</th>
+                                    <th>Travel Date</th>
+                                    <th>Seats</th>
+                                    <th>Type</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cotravel-tbody">
+                                <tr>
+                                    <td colspan="7" class="text-center">Loading co-travel postings...</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

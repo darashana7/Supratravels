@@ -1,69 +1,45 @@
 // ── API base URL ─────────────────────────────────────────────────────────────
 // In production this points to your Render backend.
-// For local dev, change to 'http://localhost:5000'
-const API_BASE = window.SUPRA_API_URL || 'https://supratravels.onrender.com';
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:5000'
+    : 'https://supratravels.onrender.com';
 
 // ── Static fallback data (shown if API is unavailable) ───────────────────────
 const FALLBACK_CONTACT = {
-    phone: '+91 98765 43210',
-    whatsapp: '919876543210',
+    phone: '+91 96860 20017',
+    whatsapp: '919686020017',
     email: 'info@supratravels.in',
-    address: '124 Travel Avenue, Jubilee Hills, Hyderabad – 500033'
+    address: 'Main Road, Hosadurga, Karnataka - 577527'
 };
 
 const FALLBACK_TRIPS = [
-    { _id: 'f1', title: 'Kerala Backwaters', location: 'Kerala, India', image: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=800&q=80', price: 15999, duration: '5 Days / 4 Nights', badge: 'Most Popular' },
-    { _id: 'f2', title: 'Majestic Kashmir', location: 'J&K, India', image: 'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=800&q=80', price: 22499, duration: '6 Days / 5 Nights', badge: '20% OFF' },
-    { _id: 'f3', title: 'Goa Beach Escape', location: 'Goa, India', image: 'https://images.unsplash.com/photo-1583183575377-58a8f5b77b8d?auto=format&fit=crop&w=800&q=80', price: 9999, duration: '4 Days / 3 Nights', badge: 'Weekend Deal' },
-    { _id: 'f4', title: 'Dubai Extravaganza', location: 'Dubai, UAE', image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80', price: 54999, duration: '5 Days / 4 Nights', badge: 'International' },
-    { _id: 'f5', title: 'Bali Paradise', location: 'Bali, Indonesia', image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=800&q=80', price: 49999, duration: '7 Days / 6 Nights', badge: 'Best Seller' },
-    { _id: 'f6', title: 'Rajasthan Heritage', location: 'Rajasthan, India', image: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=800&q=80', price: 18499, duration: '6 Days / 5 Nights', badge: '' }
+    { _id: 'f1', title: 'Bangalore to Hosadurga', location: 'Hosadurga, Karnataka', image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80', price: 450, duration: '5h 30m', badge: 'DAILY' },
+    { _id: 'f2', title: 'Bangalore to Chitradurga', location: 'Chitradurga, Karnataka', image: 'https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=800&q=80', price: 550, duration: '6h 15m', badge: 'AC Sleeper' },
+    { _id: 'f3', title: 'Hosadurga to Bangalore', location: 'Bangalore, Karnataka', image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80', price: 450, duration: '5h 30m', badge: 'DAILY' },
+    { _id: 'f4', title: 'Bangalore to Davangere', location: 'Davangere, Karnataka', image: 'https://images.unsplash.com/photo-1562620669-9839e5571477?auto=format&fit=crop&w=800&q=80', price: 600, duration: '6h 45m', badge: 'Express' }
 ];
 
 const TESTIMONIALS = [
-    { name: 'Priya Sharma', avatar: 'PS', rating: 5, text: 'Absolutely incredible experience! Supra Travels planned every detail of our Kashmir trip perfectly. The houseboat stay was magical.', trip: 'Kashmir Trip' },
-    { name: 'Rahul Mehta', avatar: 'RM', rating: 5, text: 'The Dubai package was beyond our expectations. Seamless coordination, beautiful hotels, and the team was available 24/7. Truly premium.', trip: 'Dubai Package' },
-    { name: 'Anjali Nair', avatar: 'AN', rating: 5, text: 'Kerala backwaters trip was a dream come true. The itinerary was crafted with so much care. Supra Travels really understands travellers!', trip: 'Kerala Package' },
-    { name: 'Vikram Patel', avatar: 'VP', rating: 5, text: 'Booked the Bali trip for our honeymoon. Every resort, every activity hand-picked for us. Absolutely romantic and stress-free. 10/10!', trip: 'Bali Honeymoon' }
+    { name: 'Ramesh Kumar', avatar: 'RK', rating: 5, text: 'Excellent service! The bus was clean, AC worked perfectly, and we reached on time. Highly recommend!', trip: 'Bangalore to Hosadurga' },
+    { name: 'Priya Sharma', avatar: 'PS', rating: 5, text: 'Booking was so easy and the seats were very comfortable. Will definitely travel with Supra again.', trip: 'Bangalore to Chitradurga' },
+    { name: 'Manjunath G', avatar: 'MG', rating: 5, text: 'Been using Supra for my weekly travel between Bangalore and Hosadurga. Never disappointed!', trip: 'Hosadurga to Bangalore' }
 ];
 
 // ── 3D GLOBE GLOBAL STATE ───────────────────────────────────────────────────
 let scene, camera, renderer, globeGroup;
 let isRotatingGlobe = true;
 let globeRotateTimeout;
+let routeLines = [];
 
-// Map locations to Latitude/Longitude for 3D Earth positioning
-const DEST_COORDS = {
-    'Kerala Backwaters': { lat: 10.85, lon: 76.27 },
-    'Majestic Kashmir': { lat: 34.08, lon: 74.79 },
-    'Goa Beach Escape': { lat: 15.29, lon: 74.12 },
-    'Dubai Extravaganza': { lat: 25.204, lon: 55.27 },
-    'Bali Paradise': { lat: -8.409, lon: 115.18 },
-    'Rajasthan Heritage': { lat: 27.02, lon: 74.21 }
+// Geographically accurate coordinates for operational Karnataka hubs
+const HUB_COORDS = {
+    'Bangalore': { lat: 12.9716, lon: 77.5946 },
+    'Tumkur': { lat: 13.3379, lon: 77.1173 },
+    'Hiriyur': { lat: 13.9456, lon: 76.6189 },
+    'Hosadurga': { lat: 13.7947, lon: 76.2893 },
+    'Chitradurga': { lat: 14.2251, lon: 76.4005 },
+    'Davangere': { lat: 14.4644, lon: 75.9218 }
 };
-
-// Get geographic coordinates for a destination (with deterministic hash fallback)
-function getCoordsForTrip(title, location) {
-    const t = title.toLowerCase();
-    const l = location.toLowerCase();
-    
-    if (t.includes('kerala') || l.includes('kerala')) return DEST_COORDS['Kerala Backwaters'];
-    if (t.includes('kashmir') || l.includes('kashmir') || l.includes('j&k')) return DEST_COORDS['Majestic Kashmir'];
-    if (t.includes('goa') || l.includes('goa')) return DEST_COORDS['Goa Beach Escape'];
-    if (t.includes('dubai') || l.includes('dubai')) return DEST_COORDS['Dubai Extravaganza'];
-    if (t.includes('bali') || l.includes('bali')) return DEST_COORDS['Bali Paradise'];
-    if (t.includes('rajasthan') || l.includes('rajasthan')) return DEST_COORDS['Rajasthan Heritage'];
-    
-    // Deterministic fallback coordinates for any new user packages
-    let hash = 0;
-    const str = title + location;
-    for (let i = 0; i < str.length; i++) {
-        hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const lat = (hash % 50) - 10; // -10 to 40
-    const lon = ((hash >> 8) % 110) + 40; // 40 to 150 (focused on EMEA / APAC)
-    return { lat, lon };
-}
 
 // Convert Lat/Lon coordinates to a Vector3 on the 3D Sphere surface
 function latLonToVector3(lat, lon, radius) {
@@ -108,14 +84,12 @@ function createProceduralEarthTexture() {
     ctx.shadowColor = '#ea580c';
     
     const landmasses = [
-        { x: 730, y: 180, r: 60 }, { x: 750, y: 220, r: 50 }, { x: 690, y: 200, r: 40 },
-        { x: 800, y: 160, r: 45 }, { x: 830, y: 210, r: 35 }, { x: 770, y: 270, r: 25 }, // Asia
-        { x: 530, y: 140, r: 40 }, { x: 560, y: 110, r: 35 }, { x: 490, y: 130, r: 30 }, // Europe
-        { x: 540, y: 300, r: 70 }, { x: 560, y: 380, r: 45 }, { x: 610, y: 330, r: 35 }, // Africa
-        { x: 230, y: 150, r: 65 }, { x: 180, y: 130, r: 45 }, { x: 280, y: 180, r: 40 }, // N. America
-        { x: 300, y: 380, r: 55 }, { x: 330, y: 440, r: 35 }, { x: 270, y: 330, r: 30 }, // S. America
-        { x: 880, y: 370, r: 45 }, { x: 910, y: 390, r: 35 }, // Australia
-        { x: 380, y: 70, r: 40 } // Greenland
+        { x: 730, y: 180, r: 65 }, { x: 750, y: 220, r: 55 }, { x: 690, y: 200, r: 40 }, // India / Asia Focus
+        { x: 530, y: 140, r: 40 }, { x: 560, y: 110, r: 35 }, // Europe
+        { x: 540, y: 300, r: 70 }, { x: 560, y: 380, r: 45 }, // Africa
+        { x: 230, y: 150, r: 65 }, { x: 280, y: 180, r: 40 }, // N. America
+        { x: 300, y: 380, r: 55 }, { x: 330, y: 440, r: 35 }, // S. America
+        { x: 880, y: 370, r: 45 }, { x: 910, y: 390, r: 35 }  // Australia
     ];
     
     landmasses.forEach(c => {
@@ -133,22 +107,85 @@ function createProceduralEarthTexture() {
     return new THREE.CanvasTexture(canvas);
 }
 
-// Rotate the globe smoothly to target Lat/Lon
-function rotateGlobeTo(lat, lon) {
-    if (!globeGroup) return;
+// Draw a glowing 3D Bezier curve arc representing travel routes
+function draw3DRouteArc(startKey, endKey) {
+    const start = HUB_COORDS[startKey];
+    const end = HUB_COORDS[endKey];
+    if (!start || !end) return null;
     
+    const r = 12.0; // Radius matches earth sphere core
+    const startVec = latLonToVector3(start.lat, start.lon, r);
+    const endVec = latLonToVector3(end.lat, end.lon, r);
+    
+    // Calculate control midpoint raised above the surface
+    const midPoint = new THREE.Vector3().addVectors(startVec, endVec).multiplyScalar(0.5);
+    const distance = startVec.distanceTo(endVec);
+    
+    // In Karnataka coordinates are close, so we blow up the arc height factor slightly for visibility
+    const arcHeight = r + distance * 1.5; 
+    midPoint.normalize().multiplyScalar(arcHeight);
+    
+    const curve = new THREE.QuadraticBezierCurve3(startVec, midPoint, endVec);
+    const points = curve.getPoints(50);
+    const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
+    
+    const lineMat = new THREE.LineBasicMaterial({
+        color: 0x2563eb, // Default tech blue
+        linewidth: 3,
+        transparent: true,
+        opacity: 0.6
+    });
+    
+    const line = new THREE.Line(lineGeo, lineMat);
+    globeGroup.add(line);
+    
+    return { line, startKey, endKey, lineMat };
+}
+
+// Center the globe on a specific route and highlight its arc
+function focusRoute(startKey, endKey) {
+    if (!globeGroup) return;
     isRotatingGlobe = false;
     
-    // Convert geographic coordinates to Euler angle offsets for Y and X axis rotations
-    const targetY = -(lon * Math.PI / 180) - Math.PI / 2;
-    const targetX = (lat * Math.PI / 180);
+    const start = HUB_COORDS[startKey];
+    const end = HUB_COORDS[endKey];
+    if (!start || !end) return;
+    
+    // Target coordinate is the midpoint of the route
+    const midLat = (start.lat + end.lat) / 2;
+    const midLon = (start.lon + end.lon) / 2;
+    
+    // Convert geographic coordinate to Euler angles
+    const targetY = -(midLon * Math.PI / 180) - Math.PI / 2;
+    const targetX = (midLat * Math.PI / 180);
     
     gsap.killTweensOf(globeGroup.rotation);
+    
+    // Rotate globe to midpoint
     gsap.to(globeGroup.rotation, {
         x: targetX,
         y: targetY,
-        duration: 1.6,
+        duration: 1.4,
         ease: 'power2.out'
+    });
+    
+    // Highlight matching route line and dim others
+    routeLines.forEach(rl => {
+        if ((rl.startKey === startKey && rl.endKey === endKey) || (rl.startKey === endKey && rl.endKey === startKey)) {
+            rl.lineMat.color.setHex(0xf97316); // Highlight Orange
+            rl.lineMat.opacity = 1.0;
+        } else {
+            rl.lineMat.color.setHex(0x2563eb); // Reset to Blue
+            rl.lineMat.opacity = 0.25;
+        }
+    });
+}
+
+// Reset route line highlights
+function resetRouteHighlights() {
+    routeLines.forEach(rl => {
+        rl.lineMat.color.setHex(0x2563eb);
+        rl.lineMat.opacity = 0.6;
     });
 }
 
@@ -191,7 +228,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('cta-phone').textContent = contact.phone;
 
     const waFloat = document.getElementById('floating-whatsapp');
-    waFloat.href = `https://wa.me/${contact.whatsapp}?text=Hi,%20I%20would%20like%20to%20plan%20a%20trip!`;
+    if (waFloat) waFloat.href = `https://wa.me/${contact.whatsapp}?text=Hi,%20I%20would%20like%20to%20book%20a%20seat!`;
 
     const waCtaLink = document.querySelector('.cta-wa');
     if (waCtaLink) waCtaLink.href = `https://wa.me/${contact.whatsapp}`;
@@ -199,62 +236,77 @@ document.addEventListener('DOMContentLoaded', async () => {
     // ── Initialize 3D Globe ───────────────────────────────────────────────
     init3DGlobe(trips);
 
-    // ── Render Packages ───────────────────────────────────────────────────
+    // ── Render Packages/Routes ────────────────────────────────────────────
     const container = document.getElementById('packages-container');
-    container.innerHTML = '';
+    if (container) {
+        container.innerHTML = '';
+        trips.forEach((trip, i) => {
+            const delay = (i % 3) + 1;
+            const isDiscount = trip.badge && trip.badge.toUpperCase().includes('OFF');
+            const badgeHtml = trip.badge
+                ? `<div class="badge ${isDiscount ? 'discount' : ''}">${trip.badge}</div>` : '';
 
-    trips.forEach((trip, i) => {
-        const delay = (i % 3) + 1;
-        const isDiscount = trip.badge && trip.badge.toUpperCase().includes('OFF');
-        const badgeHtml = trip.badge
-            ? `<div class="badge ${isDiscount ? 'discount' : ''}">${trip.badge}</div>` : '';
+            const card = document.createElement('div');
+            card.className = `card package-card reveal delay-${delay} active`;
+            card.innerHTML = `
+                <div class="card-img">
+                    <img src="${trip.image}" alt="${trip.title}" loading="lazy">
+                    ${badgeHtml}
+                    <div class="price-tag">
+                        <span class="price">₹${Number(trip.price).toLocaleString()}</span>
+                        <span class="person">/seat</span>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="rating">
+                        ${'<i class="fa-solid fa-star"></i>'.repeat(5)}
+                    </div>
+                    <h3>${trip.title}</h3>
+                    <p class="location"><i class="fa-solid fa-route"></i> ${trip.location}</p>
+                    <div class="card-features">
+                        <span><i class="fa-regular fa-clock"></i> ${trip.duration}</span>
+                        <span><i class="fa-solid fa-couch"></i> AC Sleeper</span>
+                        <span><i class="fa-solid fa-location-arrow"></i> Daily Service</span>
+                    </div>
+                    <div class="card-actions">
+                        <a href="#contact" class="btn btn-outline">View Details</a>
+                        <a href="#contact" class="btn btn-primary">Book Now</a>
+                    </div>
+                </div>
+            `;
+            
+            // Highlight route paths on card hover
+            card.addEventListener('mouseenter', () => {
+                let startNode = 'Bangalore';
+                let endNode = 'Hosadurga';
+                
+                const titleLower = trip.title.toLowerCase();
+                if (titleLower.includes('bangalore') && titleLower.includes('hosadurga')) {
+                    startNode = 'Bangalore'; endNode = 'Hosadurga';
+                } else if (titleLower.includes('bangalore') && titleLower.includes('chitradurga')) {
+                    startNode = 'Bangalore'; endNode = 'Chitradurga';
+                } else if (titleLower.includes('hosadurga') && titleLower.includes('bangalore')) {
+                    startNode = 'Hosadurga'; endNode = 'Bangalore';
+                } else if (titleLower.includes('bangalore') && titleLower.includes('davangere')) {
+                    startNode = 'Bangalore'; endNode = 'Davangere';
+                }
+                
+                focusRoute(startNode, endNode);
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                resetRouteHighlights();
+                clearTimeout(globeRotateTimeout);
+                globeRotateTimeout = setTimeout(() => {
+                    isRotatingGlobe = true;
+                }, 3000);
+            });
 
-        const card = document.createElement('div');
-        card.className = `card package-card reveal delay-${delay} active`;
-        card.innerHTML = `
-            <div class="card-img">
-                <img src="${trip.image}" alt="${trip.title}" loading="lazy">
-                ${badgeHtml}
-                <div class="price-tag">
-                    <span class="price">₹${Number(trip.price).toLocaleString()}</span>
-                    <span class="person">/person</span>
-                </div>
-            </div>
-            <div class="card-content">
-                <div class="rating">
-                    ${'<i class="fa-solid fa-star"></i>'.repeat(5)}
-                </div>
-                <h3>${trip.title}</h3>
-                <p class="location"><i class="fa-solid fa-location-dot"></i> ${trip.location}</p>
-                <div class="card-features">
-                    <span><i class="fa-regular fa-clock"></i> ${trip.duration}</span>
-                    <span><i class="fa-solid fa-bed"></i> Hotels</span>
-                    <span><i class="fa-solid fa-car"></i> Transport</span>
-                </div>
-                <div class="card-actions">
-                    <a href="#contact" class="btn btn-outline">View Details</a>
-                    <a href="#contact" class="btn btn-primary">Book Now</a>
-                </div>
-            </div>
-        `;
-        
-        // Dynamic hover alignment with the 3D globe coordinates
-        card.addEventListener('mouseenter', () => {
-            const coords = getCoordsForTrip(trip.title, trip.location);
-            rotateGlobeTo(coords.lat, coords.lon);
+            container.appendChild(card);
         });
-        
-        card.addEventListener('mouseleave', () => {
-            clearTimeout(globeRotateTimeout);
-            globeRotateTimeout = setTimeout(() => {
-                isRotatingGlobe = true;
-            }, 3000);
-        });
+    }
 
-        container.appendChild(card);
-    });
-
-    // Wire tilt effect to cards
+    // Wire 3D tilt effects
     init3DTilt();
 
     // ── Render Testimonials ───────────────────────────────────────────────
@@ -387,7 +439,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 // ── THREE.JS GLOBE BUILDER ───────────────────────────────────────────────────
-function init3DGlobe(trips) {
+function init3DGlobe() {
     const container = document.getElementById('hero-3d-container');
     if (!container) return;
     
@@ -405,13 +457,16 @@ function init3DGlobe(trips) {
         return;
     }
     
-    // Setup Scene, Camera
+    // Setup Scene
     scene = new THREE.Scene();
     
     const width = container.clientWidth || 500;
     const height = container.clientHeight || 500;
-    camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-    camera.position.z = 40;
+    
+    // Setup camera centered closer to Karnataka region for focus
+    camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 1000);
+    camera.position.set(4, 9, 26); // Angle targeting southern India
+    camera.lookAt(0, 0, 0);
     
     // Setup Renderer
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -437,18 +492,18 @@ function init3DGlobe(trips) {
     
     // Holographic wireframe overlay shell
     const wireMat = new THREE.MeshBasicMaterial({
-        color: 0x2563eb, // blue technological glow wireframe
+        color: 0x2563eb,
         wireframe: true,
         transparent: true,
         opacity: 0.08
     });
     const wireMesh = new THREE.Mesh(earthGeo, wireMat);
-    wireMesh.scale.setScalar(1.02);
+    wireMesh.scale.setScalar(1.015);
     globeGroup.add(wireMesh);
     
-    // Add Glowing Pins for Destinations
-    trips.forEach(trip => {
-        const coords = getCoordsForTrip(trip.title, trip.location);
+    // Add Glowing Hub Pins for all Karnataka stations
+    Object.keys(HUB_COORDS).forEach(key => {
+        const coords = HUB_COORDS[key];
         const pinPos = latLonToVector3(coords.lat, coords.lon, 12.0);
         
         const pinGroup = new THREE.Group();
@@ -459,20 +514,21 @@ function init3DGlobe(trips) {
         const up = new THREE.Vector3(0, 1, 0);
         pinGroup.quaternion.setFromUnitVectors(up, direction);
         
-        // Blue spike
-        const spikeGeo = new THREE.ConeGeometry(0.2, 1.2, 8);
-        spikeGeo.translate(0, 0.6, 0); // pivot at base
-        const spikeMat = new THREE.MeshBasicMaterial({
-            color: 0x2563eb,
+        // Pin Base Circle Ring
+        const ringGeo = new THREE.RingGeometry(0.1, 0.25, 12);
+        ringGeo.rotateX(-Math.PI / 2);
+        const ringMat = new THREE.MeshBasicMaterial({
+            color: 0xf97316,
+            side: THREE.DoubleSide,
             transparent: true,
-            opacity: 0.75
+            opacity: 0.8
         });
-        const spikeMesh = new THREE.Mesh(spikeGeo, spikeMat);
-        pinGroup.add(spikeMesh);
+        const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+        pinGroup.add(ringMesh);
         
         // Orange glowing indicator tip
-        const glowGeo = new THREE.SphereGeometry(0.35, 8, 8);
-        glowGeo.translate(0, 1.2, 0);
+        const glowGeo = new THREE.SphereGeometry(0.2, 8, 8);
+        glowGeo.translate(0, 0.25, 0);
         const glowMat = new THREE.MeshBasicMaterial({
             color: 0xf97316,
             transparent: true,
@@ -484,24 +540,39 @@ function init3DGlobe(trips) {
         globeGroup.add(pinGroup);
     });
     
+    // Draw 3D Route Lines connecting operational paths
+    routeLines = [
+        draw3DRouteArc('Bangalore', 'Tumkur'),
+        draw3DRouteArc('Tumkur', 'Hiriyur'),
+        draw3DRouteArc('Hiriyur', 'Hosadurga'),
+        draw3DRouteArc('Hiriyur', 'Chitradurga'),
+        draw3DRouteArc('Chitradurga', 'Davangere')
+    ].filter(Boolean);
+    
     // Lights Setup
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
     scene.add(ambientLight);
     
     const directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.9);
-    directionalLight1.position.set(5, 5, 20);
+    directionalLight1.position.set(5, 10, 20);
     scene.add(directionalLight1);
     
-    const directionalLight2 = new THREE.DirectionalLight(0x2563eb, 0.6); // Soft blue rim light
+    const directionalLight2 = new THREE.DirectionalLight(0x2563eb, 0.7); // Rim light
     directionalLight2.position.set(-15, 10, -10);
     scene.add(directionalLight2);
+    
+    // Initial Earth Rotation to point to Karnataka, India on startup
+    const india = HUB_COORDS['Bangalore'];
+    const targetY = -(india.lon * Math.PI / 180) - Math.PI / 2;
+    const targetX = (india.lat * Math.PI / 180);
+    globeGroup.rotation.set(targetX, targetY, 0);
     
     // Render loop animation
     function animateGlobe() {
         requestAnimationFrame(animateGlobe);
         
         if (isRotatingGlobe) {
-            globeGroup.rotation.y += 0.0025;
+            globeGroup.rotation.y += 0.0018; // Very slow drift
         }
         
         renderer.render(scene, camera);
